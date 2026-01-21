@@ -32,5 +32,5 @@ Para satisfazer o requisito de segurança, foi elaborado o seguinte diagrama ló
 
 ![Diagrama Lógico Segurança](/doc/diagrama_logico_seguranca.png)
 
-_O nome 'system_user' foi usado, pois no Postgres 'user' é uma palavra reservada._
+_O nome 'app_user' foi usado, pois no Postgres 'user' é uma palavra reservada._
 
