@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.UUID;
-
 @Data
 @Entity
 @Table(name="app_user")
