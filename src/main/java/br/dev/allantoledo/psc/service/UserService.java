@@ -1,5 +1,6 @@
 package br.dev.allantoledo.psc.service;
 
+import br.dev.allantoledo.psc.util.EntityUpdater;
 import br.dev.allantoledo.psc.dto.UserCreationForm;
 import br.dev.allantoledo.psc.dto.UserUpdateForm;
 import br.dev.allantoledo.psc.entity.User;
@@ -44,26 +45,7 @@ public class UserService {
                 .findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        user.setId(id);
-        if(userUpdateForm.getName() != null) {
-            user.setName(userUpdateForm.getName().orElse(null));
-        }
-
-        if(userUpdateForm.getEmail() != null) {
-            user.setEmail(userUpdateForm.getEmail().orElse(null));
-        }
-
-        if(userUpdateForm.getPassword() != null) {
-            if(userUpdateForm.getPassword().isPresent()) {
-                user.setPassword(encoder.encode(userUpdateForm.getPassword().get()));
-            } else {
-                user.setPassword(null);
-            }
-        }
-
-        if(userUpdateForm.getIsAdmin() != null) {
-            user.setIsAdmin(userUpdateForm.getIsAdmin().orElse(null));
-        }
+        EntityUpdater.apply(userUpdateForm, user);
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
         if (!violations.isEmpty()) {

@@ -8,6 +8,5 @@ import java.util.Optional;
 public class UserUpdateForm {
     private Optional<String> name;
     private Optional<String> email;
-    private Optional<String> password;
     private Optional<Boolean> isAdmin;
 }
