@@ -1,19 +1,16 @@
 package br.dev.allantoledo.psc.service;
 
-import br.dev.allantoledo.psc.dto.NewUser;
-import br.dev.allantoledo.psc.dto.UpdatedUser;
+import br.dev.allantoledo.psc.dto.UserCreationForm;
+import br.dev.allantoledo.psc.dto.UserUpdateForm;
 import br.dev.allantoledo.psc.entity.User;
 import br.dev.allantoledo.psc.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Set;
@@ -27,11 +24,11 @@ public class UserService {
     final PasswordEncoder encoder;
     final Validator validator;
 
-    public User createUser(NewUser newUser) {
+    public User createUser(UserCreationForm userCreationForm) {
         User user = new User();
-        user.setName(newUser.getName());
-        user.setEmail(newUser.getEmail());
-        user.setPassword(encoder.encode(newUser.getPassword()));
+        user.setName(userCreationForm.getName());
+        user.setEmail(userCreationForm.getEmail());
+        user.setPassword(encoder.encode(userCreationForm.getPassword()));
         user.setIsAdmin(false);
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
@@ -42,30 +39,30 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updateUser(UUID id, UpdatedUser updatedUser) {
+    public User updateUser(UUID id, UserUpdateForm userUpdateForm) {
         User user = userRepository
                 .findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         user.setId(id);
-        if(updatedUser.getName() != null) {
-            user.setName(updatedUser.getName().orElse(null));
+        if(userUpdateForm.getName() != null) {
+            user.setName(userUpdateForm.getName().orElse(null));
         }
 
-        if(updatedUser.getEmail() != null) {
-            user.setEmail(updatedUser.getEmail().orElse(null));
+        if(userUpdateForm.getEmail() != null) {
+            user.setEmail(userUpdateForm.getEmail().orElse(null));
         }
 
-        if(updatedUser.getPassword() != null) {
-            if(updatedUser.getPassword().isPresent()) {
-                user.setPassword(encoder.encode(updatedUser.getPassword().get()));
+        if(userUpdateForm.getPassword() != null) {
+            if(userUpdateForm.getPassword().isPresent()) {
+                user.setPassword(encoder.encode(userUpdateForm.getPassword().get()));
             } else {
                 user.setPassword(null);
             }
         }
 
-        if(updatedUser.getIsAdmin() != null) {
-            user.setIsAdmin(updatedUser.getIsAdmin().orElse(null));
+        if(userUpdateForm.getIsAdmin() != null) {
+            user.setIsAdmin(userUpdateForm.getIsAdmin().orElse(null));
         }
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
