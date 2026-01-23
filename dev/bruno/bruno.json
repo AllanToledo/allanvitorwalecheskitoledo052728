@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Processo Seletivo 001/2026 Seplag",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

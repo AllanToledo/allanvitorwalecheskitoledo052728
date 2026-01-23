@@ -1,0 +1,22 @@
+meta {
+  name: Atualizar Usuário
+  type: http
+  seq: 3
+}
+
+put {
+  url: http://localhost:8080/users/7fb271da-7850-4c79-b8b6-d73507c19861
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Teste 2",
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
