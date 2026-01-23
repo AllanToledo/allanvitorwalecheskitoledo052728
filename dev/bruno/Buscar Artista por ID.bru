@@ -1,0 +1,22 @@
+meta {
+  name: Buscar Artista por ID
+  type: http
+  seq: 7
+}
+
+get {
+  url: http://localhost:8080/artists/b5e98061-e5de-4f4d-8968-49fb48f5f264
+  body: none
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": null
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
