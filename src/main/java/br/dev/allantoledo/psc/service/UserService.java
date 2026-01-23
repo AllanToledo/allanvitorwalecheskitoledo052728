@@ -32,11 +32,6 @@ public class UserService {
         user.setPassword(encoder.encode(userCreationForm.getPassword()));
         user.setIsAdmin(false);
 
-        Set<ConstraintViolation<User>> violations = validator.validate(user);
-        if (!violations.isEmpty()) {
-            throw new ConstraintViolationException("Não é possível cadastrar usuário", violations);
-        }
-
         return userRepository.save(user);
     }
 
@@ -46,11 +41,6 @@ public class UserService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         EntityUpdater.apply(userUpdateForm, user);
-
-        Set<ConstraintViolation<User>> violations = validator.validate(user);
-        if (!violations.isEmpty()) {
-            throw new ConstraintViolationException("Não é possível atualizar usuário", violations);
-        }
 
         return userRepository.save(user);
     }
