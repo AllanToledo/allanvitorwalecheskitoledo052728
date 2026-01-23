@@ -34,3 +34,19 @@ Para satisfazer o requisito de segurança, foi elaborado o seguinte diagrama ló
 
 _O nome 'app_user' foi usado, pois no Postgres 'user' é uma palavra reservada._
 
+### Rotas
+
+As rotas seguem boas práticas definidas pela arquitetura REST e pela comunidade.
+
+`POST /users` -> Cria um novo usuário \
+`PUT  /users/{id}` -> Atualiza (parcial ou integralmente) um usuário existente
+
+`POST /artists` -> Cria um novo artista \
+`PUT  /artists/{id}` -> Atualiza (parcial ou integralmente) um artista existente \
+`GET  /artists` -> Retorna uma coleção paginada de artistas \
+`GET  /artists/{id}` -> Retorna um artista
+
+`POST /albums` -> Cria um novo álbum \
+`PUT /albums/{id}` -> Atualiza (parcial ou integralmente) um álbum \
+`GET /albums` -> Retorna uma coleção paginada de álbuns \
+`GET /albuns/{id}` -> Retorna um álbum
