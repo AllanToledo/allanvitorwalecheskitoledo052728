@@ -9,4 +9,5 @@ public class UserUpdateForm {
     private Optional<String> name;
     private Optional<String> email;
     private Optional<Boolean> isAdmin;
+    private Optional<String> password;
 }
