@@ -50,3 +50,20 @@ As rotas seguem boas práticas definidas pela arquitetura REST e pela comunidade
 `PUT /albums/{id}` -> Atualiza (parcial ou integralmente) um álbum \
 `GET /albums` -> Retorna uma coleção paginada de álbuns \
 `GET /albuns/{id}` -> Retorna um álbum
+
+### Parâmetros nas rotas
+
+Os parâmetros são opcionais e se usados são aplicados através do conectivo lógico conjunção (AND)
+
+`GET /albums` Aceita os seguintes parametros:
+* `artistNameLike`
+* `artistIdEqual`
+* `albumNameLike`
+* `albumYearEqual`
+* `albumYearBefore`
+* `albumYearAfter`
+
+### Paginação
+A paginação é composta por dois parâmetros especiais nas rotas de coleções:
+* `offset` (padrão: 0)
+* `limit` (padrão: 10)
