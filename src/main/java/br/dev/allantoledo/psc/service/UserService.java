@@ -1,8 +1,8 @@
 package br.dev.allantoledo.psc.service;
 
 import br.dev.allantoledo.psc.util.EntityUpdater;
-import br.dev.allantoledo.psc.dto.UserCreationForm;
-import br.dev.allantoledo.psc.dto.UserUpdateForm;
+import br.dev.allantoledo.psc.dto.user.UserCreationForm;
+import br.dev.allantoledo.psc.dto.user.UserUpdateForm;
 import br.dev.allantoledo.psc.entity.User;
 import br.dev.allantoledo.psc.repository.UserRepository;
 import jakarta.validation.ConstraintViolation;

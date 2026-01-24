@@ -1,4 +1,4 @@
-package br.dev.allantoledo.psc.dto;
+package br.dev.allantoledo.psc.dto.artist;
 
 import br.dev.allantoledo.psc.entity.Artist;
 import lombok.Data;
@@ -15,5 +15,12 @@ public class ArtistInformation {
         artistInformation.setId(artist.getId());
         artistInformation.setName(artist.getName());
         return artistInformation;
+    }
+
+    public static Artist toArtist(ArtistInformation artistInformation) {
+        Artist artist = new Artist();
+        artist.setId(artistInformation.getId());
+        artist.setName(artistInformation.getName());
+        return artist;
     }
 }

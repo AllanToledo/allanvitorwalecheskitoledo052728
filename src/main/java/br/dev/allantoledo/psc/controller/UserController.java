@@ -1,8 +1,8 @@
 package br.dev.allantoledo.psc.controller;
 
-import br.dev.allantoledo.psc.dto.UserInformation;
-import br.dev.allantoledo.psc.dto.UserCreationForm;
-import br.dev.allantoledo.psc.dto.UserUpdateForm;
+import br.dev.allantoledo.psc.dto.user.UserInformation;
+import br.dev.allantoledo.psc.dto.user.UserCreationForm;
+import br.dev.allantoledo.psc.dto.user.UserUpdateForm;
 import br.dev.allantoledo.psc.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

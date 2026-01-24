@@ -1,7 +1,7 @@
 package br.dev.allantoledo.psc.service;
 
-import br.dev.allantoledo.psc.dto.ArtistCreationForm;
-import br.dev.allantoledo.psc.dto.ArtistUpdateForm;
+import br.dev.allantoledo.psc.dto.artist.ArtistCreationForm;
+import br.dev.allantoledo.psc.dto.artist.ArtistUpdateForm;
 import br.dev.allantoledo.psc.entity.Artist;
 import br.dev.allantoledo.psc.repository.ArtistRepository;
 import br.dev.allantoledo.psc.util.EntityUpdater;

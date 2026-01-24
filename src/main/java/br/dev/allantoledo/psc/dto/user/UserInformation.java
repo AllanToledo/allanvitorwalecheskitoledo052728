@@ -1,4 +1,4 @@
-package br.dev.allantoledo.psc.dto;
+package br.dev.allantoledo.psc.dto.user;
 
 import br.dev.allantoledo.psc.entity.User;
 import lombok.Data;

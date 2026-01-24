@@ -1,9 +1,9 @@
 package br.dev.allantoledo.psc.controller;
 
-import br.dev.allantoledo.psc.dto.ArtistCollection;
-import br.dev.allantoledo.psc.dto.ArtistInformation;
-import br.dev.allantoledo.psc.dto.ArtistCreationForm;
-import br.dev.allantoledo.psc.dto.ArtistUpdateForm;
+import br.dev.allantoledo.psc.dto.artist.ArtistCollection;
+import br.dev.allantoledo.psc.dto.artist.ArtistInformation;
+import br.dev.allantoledo.psc.dto.artist.ArtistCreationForm;
+import br.dev.allantoledo.psc.dto.artist.ArtistUpdateForm;
 import br.dev.allantoledo.psc.service.ArtistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
