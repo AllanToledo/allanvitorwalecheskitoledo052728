@@ -11,10 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static br.dev.allantoledo.psc.util.StringUtility.fromString;
+import static java.util.Objects.requireNonNullElse;
 
 @Service
 @RequiredArgsConstructor
@@ -31,8 +32,19 @@ public class AlbumService {
         return albumRepository.save(album);
     }
 
-    public List<Album> getAlbumCollection() {
-        return albumRepository.findAllAndFetchAuthors();
+    public List<Album> getAlbumCollection(Map<String, String> params) {
+        List<UUID> ids = albumRepository.findAllAlbumsByParams(
+                fromString(String.class, params.get("artistNameLike")),
+                fromString(UUID.class, params.get("artistIdEqual")),
+                fromString(String.class, params.get("albumNameLike")),
+                fromString(Integer.class, params.get("albumYearEqual")),
+                fromString(Integer.class, params.get("albumYearBefore")),
+                fromString(Integer.class, params.get("albumYearAfter")),
+                requireNonNullElse(fromString(Integer.class, params.get("offset")), 0),
+                requireNonNullElse(fromString(Integer.class, params.get("limit")), 100)
+        );
+
+        return albumRepository.findAllByIdsAndFetchAuthors(ids);
     }
 
     public Album updateAlbum(UUID id, AlbumUpdateForm albumUpdateForm) {

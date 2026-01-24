@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -31,8 +32,9 @@ public class AlbumController {
     }
 
     @GetMapping("/albums")
-    public AlbumCollection getAlbumCollection() {
-        List<AlbumInformation> albums = albumService.getAlbumCollection()
+    public AlbumCollection getAlbumCollection(@RequestParam Map<String, String> params) {
+        List<AlbumInformation> albums = albumService
+                .getAlbumCollection(params)
                 .stream().map(AlbumInformation::fromAlbum).toList();
 
         AlbumCollection albumCollection = new AlbumCollection();
