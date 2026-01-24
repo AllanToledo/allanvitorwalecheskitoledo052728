@@ -8,6 +8,7 @@ import java.util.Set;
 
 
 @Data
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class AlbumUpdateForm {
     private Optional<String> name;
     private Optional<Integer> year;

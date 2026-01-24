@@ -4,7 +4,6 @@ import br.dev.allantoledo.psc.dto.user.UserCreationForm;
 import br.dev.allantoledo.psc.dto.user.UserUpdateForm;
 import br.dev.allantoledo.psc.entity.User;
 import br.dev.allantoledo.psc.repository.UserRepository;
-import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;

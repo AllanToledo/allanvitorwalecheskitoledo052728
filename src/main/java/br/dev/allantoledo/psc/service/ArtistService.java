@@ -4,7 +4,6 @@ import br.dev.allantoledo.psc.dto.artist.ArtistCreationForm;
 import br.dev.allantoledo.psc.dto.artist.ArtistUpdateForm;
 import br.dev.allantoledo.psc.entity.Artist;
 import br.dev.allantoledo.psc.repository.ArtistRepository;
-import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
