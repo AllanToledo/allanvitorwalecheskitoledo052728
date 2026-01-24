@@ -1,0 +1,32 @@
+meta {
+  name: Novo
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8080/albums
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Clube da Esquina",
+    "authors": [
+      {
+        "id": "64a1f954-c203-4870-9035-0bbccf9fb5a0",
+        "name": "Milton Santos"
+      },
+      {
+        "id": "dee4d5f7-290f-45f2-ae1f-eb7ef5075556",
+        "name": "Lô Borges"
+      }
+    ]
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
