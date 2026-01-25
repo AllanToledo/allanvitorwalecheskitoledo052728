@@ -13,14 +13,18 @@ import java.util.UUID;
 public interface AlbumRepository extends JpaRepository<Album, UUID> {
 
 
-    @Query("SELECT a FROM Album a JOIN FETCH a.authors WHERE a.id = :id")
+    @Query("""
+            SELECT a FROM Album a
+            JOIN FETCH a.authors
+            WHERE a.id = :id
+    """)
     Optional<Album> findAlbumByIdAndFetchAuthors(UUID id);
 
     @Query(value = """
         SELECT subselect.id FROM (
             SELECT DISTINCT album.id, album.year FROM album
-            INNER JOIN author ON album.id = author.id_album
-            INNER JOIN artist ON artist.id = author.id_artist
+            LEFT JOIN author ON album.id = author.id_album
+            LEFT JOIN artist ON artist.id = author.id_artist
             WHERE (:artistName      IS NULL OR artist.name ILIKE :artistName)
             AND (:artistId          IS NULL OR artist.id = :artistId)
             AND (:albumName         IS NULL OR album.name ILIKE :albumName)
@@ -43,6 +47,10 @@ public interface AlbumRepository extends JpaRepository<Album, UUID> {
     );
 
     //Usando JOIN FETCH resolve o problema de N+1 consultas
-    @Query("SELECT a FROM Album a LEFT JOIN FETCH a.authors WHERE a.id IN :albumsIds ORDER BY a.year")
+    @Query("""
+        SELECT a FROM Album a
+        JOIN FETCH a.authors b
+        WHERE a.id IN :albumsIds ORDER BY a.year
+    """)
     List<Album> findAllByIdsAndFetchAuthors(List<UUID> albumsIds);
 }
