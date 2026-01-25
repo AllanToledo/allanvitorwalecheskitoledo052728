@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
+import static br.dev.allantoledo.psc.util.StreamUtility.mapToSet;
 import static br.dev.allantoledo.psc.util.StringUtility.fromString;
 import static java.util.Objects.requireNonNullElse;
 
@@ -25,8 +25,7 @@ public class AlbumService {
     public Album createAlbum(AlbumCreationForm albumCreationForm) {
         Album album = new Album();
         album.setName(albumCreationForm.getName());
-        Set<Artist> artists = albumCreationForm.getAuthors()
-                .stream().map(ArtistInformation::toArtist).collect(Collectors.toSet());
+        Set<Artist> artists = mapToSet(albumCreationForm.getAuthors(), ArtistInformationWithAlbums::toArtist);
         album.setAuthors(artists);
 
         return albumRepository.save(album);
@@ -61,11 +60,11 @@ public class AlbumService {
 
         if (albumUpdateForm.getAuthors() != null) {
             if (albumUpdateForm.getAuthors().isPresent()) {
-                Set<Artist> authors = albumUpdateForm.getAuthors().get().stream()
-                        .map(ArtistInformation::toArtist).collect(Collectors.toSet());
+                Set<ArtistInformation> artists = albumUpdateForm.getAuthors().get();
+                Set<Artist> authors = mapToSet(artists, ArtistInformation::toArtist);
                 album.setAuthors(authors);
             } else {
-                album.setName(null);
+                album.setAuthors(null);
             }
         }
 

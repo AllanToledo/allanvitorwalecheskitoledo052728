@@ -1,15 +1,15 @@
 package br.dev.allantoledo.psc.controller;
 
-import br.dev.allantoledo.psc.dto.artist.ArtistCollection;
-import br.dev.allantoledo.psc.dto.artist.ArtistInformation;
-import br.dev.allantoledo.psc.dto.artist.ArtistCreationForm;
-import br.dev.allantoledo.psc.dto.artist.ArtistUpdateForm;
+import br.dev.allantoledo.psc.dto.artist.*;
+import br.dev.allantoledo.psc.entity.Artist;
 import br.dev.allantoledo.psc.service.ArtistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+
+import static br.dev.allantoledo.psc.util.StreamUtility.mapToList;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,11 +34,10 @@ public class ArtistController {
 
     @GetMapping("/artists")
     public ArtistCollection getArtistCollection() {
-        List<ArtistInformation> artists = artistService.getArtistCollection()
-                .stream().map(ArtistInformation::fromArtist).toList();
+        List<Artist> artists = artistService.getArtistCollection();
 
         ArtistCollection artistCollection = new ArtistCollection();
-        artistCollection.setArtists(artists);
+        artistCollection.setArtists(mapToList(artists, ArtistInformation::fromArtist));
 
         return artistCollection;
     }
