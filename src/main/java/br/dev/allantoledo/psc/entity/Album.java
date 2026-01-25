@@ -5,7 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -24,5 +26,7 @@ public class Album extends GenericEntity{
             joinColumns = @JoinColumn(name = "id_album"),
             inverseJoinColumns = @JoinColumn(name = "id_artist")
     )
-    private Set<Artist> authors;
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Artist> authors = new HashSet<>();
 }
