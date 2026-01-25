@@ -3,12 +3,14 @@ package br.dev.allantoledo.psc.service;
 import br.dev.allantoledo.psc.dto.album.AlbumCreationForm;
 import br.dev.allantoledo.psc.dto.album.AlbumUpdateForm;
 import br.dev.allantoledo.psc.dto.artist.ArtistInformation;
+import br.dev.allantoledo.psc.dto.artist.ArtistInformationWithAlbums;
 import br.dev.allantoledo.psc.entity.Album;
 import br.dev.allantoledo.psc.entity.Artist;
 import br.dev.allantoledo.psc.repository.AlbumRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
@@ -29,21 +31,6 @@ public class AlbumService {
         album.setAuthors(artists);
 
         return albumRepository.save(album);
-    }
-
-    public List<Album> getAlbumCollection(Map<String, String> params) {
-        List<UUID> ids = albumRepository.findAllAlbumsByParams(
-                fromString(String.class, params.get("artistNameLike")),
-                fromString(UUID.class, params.get("artistIdEqual")),
-                fromString(String.class, params.get("albumNameLike")),
-                fromString(Integer.class, params.get("albumYearEqual")),
-                fromString(Integer.class, params.get("albumYearBefore")),
-                fromString(Integer.class, params.get("albumYearAfter")),
-                requireNonNullElse(fromString(Integer.class, params.get("offset")), 0),
-                requireNonNullElse(fromString(Integer.class, params.get("limit")), 100)
-        );
-
-        return albumRepository.findAllByIdsAndFetchAuthors(ids);
     }
 
     public Album updateAlbum(UUID id, AlbumUpdateForm albumUpdateForm) {
@@ -71,6 +58,23 @@ public class AlbumService {
         return albumRepository.save(album);
     }
 
+    @Transactional(readOnly = true)
+    public List<Album> getAlbumCollection(Map<String, String> params) {
+        List<UUID> ids = albumRepository.findAllAlbumsByParams(
+                fromString(String.class, params.get("artistNameLike")),
+                fromString(UUID.class, params.get("artistIdEqual")),
+                fromString(String.class, params.get("albumNameLike")),
+                fromString(Integer.class, params.get("albumYearEqual")),
+                fromString(Integer.class, params.get("albumYearBefore")),
+                fromString(Integer.class, params.get("albumYearAfter")),
+                requireNonNullElse(fromString(Integer.class, params.get("offset")), 0),
+                requireNonNullElse(fromString(Integer.class, params.get("limit")), 100)
+        );
+
+        return albumRepository.findAllByIdsAndFetchAuthors(ids);
+    }
+
+    @Transactional(readOnly = true)
     public Album getAlbum(UUID id) {
         return albumRepository.findAlbumByIdAndFetchAuthors(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
