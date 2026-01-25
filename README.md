@@ -63,6 +63,13 @@ Os parâmetros são opcionais e se usados são aplicados através do conectivo l
 * `albumYearBefore`
 * `albumYearAfter`
 
+`GET /artists` Aceita os seguintes parametros:
+* `artistNameLike`
+* `albumNameLike`
+* `albumYearEqual`
+* `albumYearBefore`
+* `albumYearAfter`
+
 ### Paginação
 A paginação é composta por dois parâmetros especiais nas rotas de coleções:
 * `offset` (padrão: 0)
