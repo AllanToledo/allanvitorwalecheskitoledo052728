@@ -1,6 +1,6 @@
 package br.dev.allantoledo.psc.dto.album;
 
-import br.dev.allantoledo.psc.dto.artist.ArtistInformation;
+import br.dev.allantoledo.psc.dto.artist.ArtistInformationWithAlbums;
 import lombok.Data;
 
 import java.util.List;
@@ -9,5 +9,5 @@ import java.util.List;
 public class AlbumCreationForm {
     private String name;
     private Integer year;
-    private List<ArtistInformation> authors;
+    private List<ArtistInformationWithAlbums> authors;
 }

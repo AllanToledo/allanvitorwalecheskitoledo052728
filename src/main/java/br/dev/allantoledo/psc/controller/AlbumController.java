@@ -2,7 +2,7 @@ package br.dev.allantoledo.psc.controller;
 
 import br.dev.allantoledo.psc.dto.album.AlbumCollection;
 import br.dev.allantoledo.psc.dto.album.AlbumCreationForm;
-import br.dev.allantoledo.psc.dto.album.AlbumInformation;
+import br.dev.allantoledo.psc.dto.album.AlbumInformationWithAuthors;
 import br.dev.allantoledo.psc.dto.album.AlbumUpdateForm;
 import br.dev.allantoledo.psc.entity.Album;
 import br.dev.allantoledo.psc.service.AlbumService;
@@ -22,16 +22,16 @@ public class AlbumController {
     final AlbumService albumService;
 
     @PostMapping("/albums")
-    public AlbumInformation createAlbum(@RequestBody AlbumCreationForm albumCreationForm) {
-        return AlbumInformation.fromAlbum(albumService.createAlbum(albumCreationForm));
+    public AlbumInformationWithAuthors createAlbum(@RequestBody AlbumCreationForm albumCreationForm) {
+        return AlbumInformationWithAuthors.fromAlbum(albumService.createAlbum(albumCreationForm));
     }
 
     @PutMapping("/albums/{id}")
-    public AlbumInformation updateAlbum(
+    public AlbumInformationWithAuthors updateAlbum(
             @PathVariable UUID id,
             @RequestBody AlbumUpdateForm albumUpdateForm
     ) {
-        return AlbumInformation.fromAlbum(albumService.updateAlbum(id, albumUpdateForm));
+        return AlbumInformationWithAuthors.fromAlbum(albumService.updateAlbum(id, albumUpdateForm));
     }
 
     @GetMapping("/albums")
@@ -45,8 +45,8 @@ public class AlbumController {
     }
 
     @GetMapping("/albums/{id}")
-    public AlbumInformation getAlbum(@PathVariable UUID id) {
-        return AlbumInformation.fromAlbum(albumService.getAlbum(id));
+    public AlbumInformationWithAuthors getAlbum(@PathVariable UUID id) {
+        return AlbumInformationWithAuthors.fromAlbum(albumService.getAlbum(id));
     }
 
 }
