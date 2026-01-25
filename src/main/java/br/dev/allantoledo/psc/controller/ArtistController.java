@@ -34,8 +34,10 @@ public class ArtistController {
     }
 
     @GetMapping("/artists")
-    public ArtistCollection getArtistCollection() {
-        List<Artist> artists = artistService.getArtistCollection();
+    public ArtistCollection getArtistCollection(
+            @RequestParam Map<String, String> params
+    ) {
+        List<Artist> artists = artistService.getArtistCollection(params);
 
         ArtistCollection artistCollection = new ArtistCollection();
         artistCollection.setArtists(mapToList(artists, ArtistInformationWithAlbums::fromArtist));

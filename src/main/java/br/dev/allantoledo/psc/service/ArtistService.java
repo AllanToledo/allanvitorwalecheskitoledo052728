@@ -7,10 +7,15 @@ import br.dev.allantoledo.psc.repository.ArtistRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+
+import static br.dev.allantoledo.psc.util.StringUtility.fromString;
+import static java.util.Objects.requireNonNullElse;
 
 @Service
 @RequiredArgsConstructor
@@ -37,10 +42,22 @@ public class ArtistService {
         return artistRepository.save(artist);
     }
 
-    public List<Artist> getArtistCollection() {
-        return artistRepository.findAll();
+    @Transactional(readOnly = true)
+    public List<Artist> getArtistCollection(Map<String, String> params) {
+        List<UUID> ids = artistRepository.findAllArtistsByParams(
+                fromString(String.class, params.get("artistNameLike")),
+                fromString(String.class, params.get("albumNameLike")),
+                fromString(Integer.class, params.get("albumYearEqual")),
+                fromString(Integer.class, params.get("albumYearBefore")),
+                fromString(Integer.class, params.get("albumYearAfter")),
+                requireNonNullElse(fromString(Integer.class, params.get("offset")), 0),
+                requireNonNullElse(fromString(Integer.class, params.get("limit")), 100)
+        );
+
+        return artistRepository.findAllByIdsAndFetchAlbums(ids);
     }
 
+    @Transactional(readOnly = true)
     public Artist getArtist(UUID id) {
         return artistRepository
                 .findById(id)

@@ -5,9 +5,13 @@ meta {
 }
 
 get {
-  url: http://localhost:8080/artists
+  url: http://localhost:8080/artists?artistNameLike=%nunes%
   body: none
   auth: inherit
+}
+
+params:query {
+  artistNameLike: %nunes%
 }
 
 settings {
