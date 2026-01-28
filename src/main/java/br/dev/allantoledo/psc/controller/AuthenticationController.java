@@ -4,6 +4,7 @@ import br.dev.allantoledo.psc.dto.token.TokenInformation;
 import br.dev.allantoledo.psc.dto.user.UserLoginInformation;
 import br.dev.allantoledo.psc.util.SecurityUtility;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -25,11 +26,14 @@ public class AuthenticationController {
 
     private final Pattern replaceAuthorityPrefix = Pattern.compile("(ROLE|SCOPE)_");
 
+    @Value("${jwt.minutesToExpire}")
+    private Integer minutesToExpireToken;
+
     @GetMapping("/token")
     public TokenInformation getToken() {
         TokenInformation tokenInformation = new TokenInformation();
 
-        ZonedDateTime expiresAt = ZonedDateTime.now().plusMinutes(30);
+        ZonedDateTime expiresAt = ZonedDateTime.now().plusMinutes(minutesToExpireToken);
         tokenInformation.setExpiresAt(expiresAt);
 
         UserLoginInformation user = SecurityUtility.getUserLoginInformation();
