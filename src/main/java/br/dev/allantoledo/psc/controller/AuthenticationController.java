@@ -2,7 +2,6 @@ package br.dev.allantoledo.psc.controller;
 
 import br.dev.allantoledo.psc.dto.token.TokenInformation;
 import br.dev.allantoledo.psc.dto.user.UserLoginInformation;
-import br.dev.allantoledo.psc.service.UserService;
 import br.dev.allantoledo.psc.util.SecurityUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
