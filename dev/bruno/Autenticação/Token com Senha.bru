@@ -1,0 +1,21 @@
+meta {
+  name: Token com Senha
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8080/token
+  body: none
+  auth: basic
+}
+
+auth:basic {
+  username: exemplo4@gmail.com
+  password: teste123
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -38,8 +38,11 @@ _O nome 'app_user' foi usado, pois no Postgres 'user' é uma palavra reservada._
 
 As rotas seguem boas práticas definidas pela arquitetura REST e pela comunidade.
 
+`GET /token` -> Solicita um token novo \
 `POST /users` -> Cria um novo usuário \
-`PUT  /users/{id}` -> Atualiza (parcial ou integralmente) um usuário existente
+`PUT  /users/{id}` -> Atualiza (parcial ou integralmente) um usuário existente \
+`GET  /users/{id}` -> Acessa um usuário \
+`GET  /users/me` -> Acessa o próprio usuário
 
 `POST /artists` -> Cria um novo artista \
 `PUT  /artists/{id}` -> Atualiza (parcial ou integralmente) um artista existente \
@@ -70,7 +73,15 @@ Os parâmetros são opcionais e se usados são aplicados através do conectivo l
 * `albumYearBefore`
 * `albumYearAfter`
 
+`GET /users` Aceita os seguintes parametros:
+* `nameLike`
+* `emailLike`
+* `isAdminEqual`
+
 ### Paginação
 A paginação é composta por dois parâmetros especiais nas rotas de coleções:
 * `offset` (padrão: 0)
 * `limit` (padrão: 10)
+
+
+### Segurança

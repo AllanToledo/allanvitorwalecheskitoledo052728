@@ -1,0 +1,22 @@
+meta {
+  name: Atualizar eu mesmo
+  type: http
+  seq: 3
+}
+
+put {
+  url: http://localhost:8080/users/me
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "email": "exemplo123@gmail.com"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

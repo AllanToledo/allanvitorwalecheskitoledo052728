@@ -20,6 +20,7 @@ public class StringUtility {
         converters.put(Integer.class, Integer::valueOf);
         converters.put(Float.class, Float::valueOf);
         converters.put(Double.class, Double::valueOf);
+        converters.put(Boolean.class, Boolean::valueOf);
     }
 
     @SuppressWarnings("unchecked")
