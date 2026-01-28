@@ -19,9 +19,40 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) ->
-                        authorize
-                                .anyRequest().permitAll()
+                    authorize
+                        .requestMatchers(HttpMethod.POST, "/users")    .permitAll()
+                        .requestMatchers(HttpMethod.GET,  "/token")    .authenticated()
+                        .requestMatchers(HttpMethod.PUT,  "/users/*")  .access(hasScope(MANAGER_USERS.name()))
+
+                        .requestMatchers(HttpMethod.GET,  "/artists")  .access(hasScope(ACCESS_COLLECTION.name()))
+                        .requestMatchers(HttpMethod.GET,  "/artists/*").access(hasScope(ACCESS_COLLECTION.name()))
+                        .requestMatchers(HttpMethod.POST, "/artists")  .access(hasScope(EDIT_COLLECTION.name()))
+                        .requestMatchers(HttpMethod.PUT,  "/artists/*").access(hasScope(EDIT_COLLECTION.name()))
+
+                        .requestMatchers(HttpMethod.GET,  "/albums")   .access(hasScope(ACCESS_COLLECTION.name()))
+                        .requestMatchers(HttpMethod.GET,  "/albums/*") .access(hasScope(ACCESS_COLLECTION.name()))
+                        .requestMatchers(HttpMethod.POST, "/albums")   .access(hasScope(EDIT_COLLECTION.name()))
+                        .requestMatchers(HttpMethod.PUT,  "/albums/*") .access(hasScope(EDIT_COLLECTION.name()))
+                )
+                .httpBasic(Customizer.withDefaults())
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(Customizer.withDefaults())
                 )
                 .build();
+    }
+
+    @Value("${jwt.secret}")
+    private String jwtSecret;
+
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        SecretKey key = new SecretKeySpec(jwtSecret.getBytes(StandardCharsets.UTF_8), "HS256");
+        return NimbusJwtDecoder.withSecretKey(key).build();
+    }
+
+    @Bean
+    public JwtEncoder jwtEncoder() {
+        SecretKey key = new SecretKeySpec(jwtSecret.getBytes(StandardCharsets.UTF_8), "HS256");
+        return NimbusJwtEncoder.withSecretKey(key).build();
     }
 }
