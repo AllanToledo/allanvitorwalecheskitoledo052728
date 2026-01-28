@@ -1,17 +1,11 @@
 package br.dev.allantoledo.psc.controller;
 
 import br.dev.allantoledo.psc.dto.token.TokenInformation;
-import br.dev.allantoledo.psc.dto.user.UserInformation;
 import br.dev.allantoledo.psc.dto.user.UserLoginInformation;
 import br.dev.allantoledo.psc.service.UserService;
 import br.dev.allantoledo.psc.util.SecurityUtility;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -19,11 +13,8 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.time.temporal.TemporalUnit;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -32,7 +23,6 @@ import java.util.stream.Collectors;
 public class AuthenticationController {
 
     private final JwtEncoder jwtEncoder;
-    private final UserService userService;
 
     private final Pattern replaceAuthorityPrefix = Pattern.compile("(ROLE|SCOPE)_");
 

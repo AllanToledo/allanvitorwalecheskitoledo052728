@@ -23,7 +23,7 @@ import static org.springframework.security.oauth2.core.authorization.OAuth2Autho
 public class SecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain configuration(HttpSecurity http) throws Exception {
+    public SecurityFilterChain configuration(HttpSecurity http) {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
