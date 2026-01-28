@@ -6,7 +6,7 @@ import java.util.Optional;
 
 @Data
 @SuppressWarnings({"OptionalUsedAsFieldOrParameterType"})
-public class UserUpdateForm {
+public class UserUpdateAdminForm {
     private Optional<String> name;
     private Optional<String> email;
     private Optional<Boolean> isAdmin;

@@ -1,7 +1,8 @@
 package br.dev.allantoledo.psc.service;
 
+import br.dev.allantoledo.psc.dto.user.SecureUserUpdateForm;
 import br.dev.allantoledo.psc.dto.user.UserCreationForm;
-import br.dev.allantoledo.psc.dto.user.UserUpdateForm;
+import br.dev.allantoledo.psc.dto.user.UserUpdateAdminForm;
 import br.dev.allantoledo.psc.entity.User;
 import br.dev.allantoledo.psc.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,26 +30,46 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updateUser(UUID id, UserUpdateForm userUpdateForm) {
-        User user = userRepository
-                .findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public User adminUpdateUser(UUID id, UserUpdateAdminForm userUpdateAdminForm) {
+        User user = getUserById(id);
 
-        if (userUpdateForm.getName() != null) {
-            user.setName(userUpdateForm.getName().orElse(null));
+        if (userUpdateAdminForm.getName() != null) {
+            user.setName(userUpdateAdminForm.getName().orElse(null));
         }
 
-        if (userUpdateForm.getEmail() != null) {
-            user.setEmail(userUpdateForm.getEmail().orElse(null));
+        if (userUpdateAdminForm.getEmail() != null) {
+            user.setEmail(userUpdateAdminForm.getEmail().orElse(null));
         }
 
-        if (userUpdateForm.getIsAdmin() != null) {
-            user.setIsAdmin(userUpdateForm.getIsAdmin().orElse(null));
+        if (userUpdateAdminForm.getIsAdmin() != null) {
+            user.setIsAdmin(userUpdateAdminForm.getIsAdmin().orElse(null));
         }
 
-        if (userUpdateForm.getPassword() != null) {
-            if (userUpdateForm.getPassword().isPresent()) {
-                user.setPassword(encoder.encode(userUpdateForm.getPassword().get()));
+        if (userUpdateAdminForm.getPassword() != null) {
+            if (userUpdateAdminForm.getPassword().isPresent()) {
+                user.setPassword(encoder.encode(userUpdateAdminForm.getPassword().get()));
+            } else {
+                user.setPassword(null);
+            }
+        }
+
+        return userRepository.save(user);
+    }
+
+    public User secureUpdateUser(UUID id, SecureUserUpdateForm secureUserUpdateForm) {
+        User user = getUserById(id);
+
+        if (secureUserUpdateForm.getName() != null) {
+            user.setName(secureUserUpdateForm.getName().orElse(null));
+        }
+
+        if (secureUserUpdateForm.getEmail() != null) {
+            user.setEmail(secureUserUpdateForm.getEmail().orElse(null));
+        }
+
+        if (secureUserUpdateForm.getPassword() != null) {
+            if (secureUserUpdateForm.getPassword().isPresent()) {
+                user.setPassword(encoder.encode(secureUserUpdateForm.getPassword().get()));
             } else {
                 user.setPassword(null);
             }

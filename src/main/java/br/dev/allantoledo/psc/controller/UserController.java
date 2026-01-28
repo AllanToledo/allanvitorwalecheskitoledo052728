@@ -1,8 +1,6 @@
 package br.dev.allantoledo.psc.controller;
 
-import br.dev.allantoledo.psc.dto.user.UserInformation;
-import br.dev.allantoledo.psc.dto.user.UserCreationForm;
-import br.dev.allantoledo.psc.dto.user.UserUpdateForm;
+import br.dev.allantoledo.psc.dto.user.*;
 import br.dev.allantoledo.psc.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +19,11 @@ public class UserController {
     }
 
     @PutMapping("/users/{id}")
-    public UserInformation updateUser(
+    public UserInformation adminUpdateUser(
             @PathVariable UUID id,
-            @RequestBody UserUpdateForm userUpdateForm
+            @RequestBody UserUpdateAdminForm userUpdateAdminForm
     ) {
-        return UserInformation.fromUser(userService.updateUser(id, userUpdateForm));
+        return UserInformation.fromUser(userService.adminUpdateUser(id, userUpdateAdminForm));
     }
+
 }
