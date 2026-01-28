@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static br.dev.allantoledo.psc.util.PaginationUtility.getValidLimit;
+import static br.dev.allantoledo.psc.util.PaginationUtility.getValidOffset;
 import static br.dev.allantoledo.psc.util.StringUtility.fromString;
 import static java.util.Objects.requireNonNullElse;
 
@@ -109,8 +111,8 @@ public class UserService implements UserDetailsService {
                 fromString(String.class, params.get("nameLike")),
                 fromString(String.class, params.get("emailLike")),
                 fromString(Boolean.class, params.get("isAdminEqual")),
-                requireNonNullElse(fromString(Integer.class, params.get("offset")), 0),
-                requireNonNullElse(fromString(Integer.class, params.get("limit")), 100)
+                getValidOffset(fromString(Integer.class, params.get("offset"))),
+                getValidLimit(fromString(Integer.class, params.get("limit")))
         );
     }
 }

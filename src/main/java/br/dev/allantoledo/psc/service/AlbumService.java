@@ -15,6 +15,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
+import static br.dev.allantoledo.psc.util.PaginationUtility.getValidLimit;
+import static br.dev.allantoledo.psc.util.PaginationUtility.getValidOffset;
 import static br.dev.allantoledo.psc.util.StreamUtility.mapToSet;
 import static br.dev.allantoledo.psc.util.StringUtility.fromString;
 import static java.util.Objects.requireNonNullElse;
@@ -67,8 +69,8 @@ public class AlbumService {
                 fromString(Integer.class, params.get("albumYearEqual")),
                 fromString(Integer.class, params.get("albumYearBefore")),
                 fromString(Integer.class, params.get("albumYearAfter")),
-                requireNonNullElse(fromString(Integer.class, params.get("offset")), 0),
-                requireNonNullElse(fromString(Integer.class, params.get("limit")), 100)
+                getValidOffset(fromString(Integer.class, params.get("offset"))),
+                getValidLimit(fromString(Integer.class, params.get("limit")))
         );
 
         return albumRepository.findAllByIdsAndFetchAuthors(ids);
