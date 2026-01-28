@@ -1,13 +1,22 @@
 package br.dev.allantoledo.psc.configuration;
 
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.web.SecurityFilterChain;
+
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+
+import static br.dev.allantoledo.psc.util.SecurityUtility.Scopes.*;
+import static org.springframework.security.oauth2.core.authorization.OAuth2AuthorizationManagers.hasScope;
 
 @EnableWebSecurity
 @Configuration
@@ -21,7 +30,11 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((authorize) ->
                     authorize
                         .requestMatchers(HttpMethod.POST, "/users")    .permitAll()
+                        .requestMatchers(HttpMethod.GET,  "/users/me") .authenticated()
+                        .requestMatchers(HttpMethod.PUT,  "/users/me") .authenticated()
                         .requestMatchers(HttpMethod.GET,  "/token")    .authenticated()
+                        .requestMatchers(HttpMethod.GET,  "/users")    .access(hasScope(MANAGER_USERS.name()))
+                        .requestMatchers(HttpMethod.GET,  "/users/*")  .access(hasScope(MANAGER_USERS.name()))
                         .requestMatchers(HttpMethod.PUT,  "/users/*")  .access(hasScope(MANAGER_USERS.name()))
 
                         .requestMatchers(HttpMethod.GET,  "/artists")  .access(hasScope(ACCESS_COLLECTION.name()))
