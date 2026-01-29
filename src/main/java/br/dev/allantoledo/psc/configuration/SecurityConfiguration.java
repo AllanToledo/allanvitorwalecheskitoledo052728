@@ -30,6 +30,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((authorize) ->
                     authorize
                         .requestMatchers(HttpMethod.POST, "/users")    .permitAll()
+                        .requestMatchers(HttpMethod.POST, "/recovery") .permitAll()
+                        .requestMatchers(HttpMethod.GET,  "/recovery") .permitAll()
                         .requestMatchers(HttpMethod.GET,  "/users/me") .authenticated()
                         .requestMatchers(HttpMethod.PUT,  "/users/me") .authenticated()
                         .requestMatchers(HttpMethod.GET,  "/token")    .authenticated()

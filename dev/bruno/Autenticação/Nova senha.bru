@@ -1,0 +1,26 @@
+meta {
+  name: Nova senha
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:8080/recovery?token=eyJraWQiOiJ1Z3A0dHFlNzdVVlVaRUluMUlDQUlJaWZZalJHclJJMFVOSmNydEF5RnNrIiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJleHAiOjE3Njk2NDg1MTUsInN1YiI6ImFkbWluQGFkbWluLmJyIiwiaWF0IjoxNzY5NjQ2NzE1fQ.e_1UDU8SRCUAAMeJwzZYUJPyxrGYGHOr_dcO5bVQpew
+  body: json
+  auth: none
+}
+
+params:query {
+  token: eyJraWQiOiJ1Z3A0dHFlNzdVVlVaRUluMUlDQUlJaWZZalJHclJJMFVOSmNydEF5RnNrIiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJleHAiOjE3Njk2NDg1MTUsInN1YiI6ImFkbWluQGFkbWluLmJyIiwiaWF0IjoxNzY5NjQ2NzE1fQ.e_1UDU8SRCUAAMeJwzZYUJPyxrGYGHOr_dcO5bVQpew
+}
+
+body:json {
+  {
+    "newPassword": "teste"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

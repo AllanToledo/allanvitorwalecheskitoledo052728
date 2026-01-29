@@ -8,8 +8,8 @@ Autor: Allan Vitor Walecheski Toledo
 * Documentação será escrita em português.
 
 ### Objetivo do projeto
-O requisito do projeto não define seu propósito. Eu assumo que seja para criar uma biblioteca pública de informações sobre artistas 
-e bandas. Toda decisão feita, será com base nesse objetivo.
+O requisito do projeto não define seu propósito. Eu assumo que seja para criar uma biblioteca 
+pública de informações sobre artistas e bandas. Toda decisão feita, será com base nesse objetivo.
 
 ### Arquitetura
 Os requisitos do projeto especificam que o sistema deverá disponibilizar dados sobre artistas e álbuns com 
@@ -38,8 +38,10 @@ _O nome 'app_user' foi usado, pois no Postgres 'user' é uma palavra reservada._
 
 As rotas seguem boas práticas definidas pela arquitetura REST e pela comunidade.
 
-`GET /token` -> Solicita um token novo \
 `POST /users` -> Cria um novo usuário \
+`GET  /recovery?email=` -> Solicita um link de recuperação que será enviado ao email \
+`PUT  /recovery?token=` -> Atualiza a senha por link autoassinado \
+`GET  /token` -> Solicita um token novo \
 `PUT  /users/{id}` -> Atualiza (parcial ou integralmente) um usuário existente \
 `GET  /users/{id}` -> Acessa um usuário \
 `GET  /users/me` -> Acessa o próprio usuário
@@ -50,9 +52,9 @@ As rotas seguem boas práticas definidas pela arquitetura REST e pela comunidade
 `GET  /artists/{id}` -> Retorna um artista
 
 `POST /albums` -> Cria um novo álbum \
-`PUT /albums/{id}` -> Atualiza (parcial ou integralmente) um álbum \
-`GET /albums` -> Retorna uma coleção paginada de álbuns \
-`GET /albuns/{id}` -> Retorna um álbum
+`PUT  /albums/{id}` -> Atualiza (parcial ou integralmente) um álbum \
+`GET  /albums` -> Retorna uma coleção paginada de álbuns \
+`GET  /albuns/{id}` -> Retorna um álbum
 
 ### Parâmetros nas rotas
 
@@ -81,7 +83,24 @@ Os parâmetros são opcionais e se usados são aplicados através do conectivo l
 ### Paginação
 A paginação é composta por dois parâmetros especiais nas rotas de coleções:
 * `offset` (padrão: 0)
-* `limit` (padrão: 10)
+* `limit` (padrão: 100)
+
+_Paginação é obrigatória._
 
 
 ### Segurança
+A aplicação possui 3 escopos de acesso.
+* `ACCESS_COLLECTION` -> Permite realizar consultas em coleções de dados.
+* `EDIT_COLLECTION` -> Permite editar coleções de dados (Criar, Atualizar, Deletar).
+* `MANAGER_USERS` -> Permite modificações e acesso a outros usuários.
+
+Ao gerar o token de acesso, a aplicação inclui no token os escopos conforme o perfil do usuário.
+
+Para gerar o primeiro token, é possível através do cabeçalho de autenticação usando o esquema Basic.
+Para usar o token bastar usar o mesmo cabeçalho, porém trocando para o esquema Bearer.
+
+### Observações sobre a arquitetura desenvolvida
+Nenhuma operação de segurança é realizada após a validação do acesso do usuário ao recurso.
+Desta forma, o cache pode ser feita de maneira simples e eficiente: se um determinado 
+token possuí acesso ao recurso, qualquer resposta já armazenada em cache é segura de ser compartilhada.\
+Claro, com exceção da rota "/users/me", que **não deve ser armazenada na cache.**

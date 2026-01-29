@@ -1,9 +1,6 @@
 package br.dev.allantoledo.psc.service;
 
-import br.dev.allantoledo.psc.dto.user.SecureUserUpdateForm;
-import br.dev.allantoledo.psc.dto.user.UserCreationForm;
-import br.dev.allantoledo.psc.dto.user.UserLoginInformation;
-import br.dev.allantoledo.psc.dto.user.UserUpdateAdminForm;
+import br.dev.allantoledo.psc.dto.user.*;
 import br.dev.allantoledo.psc.entity.User;
 import br.dev.allantoledo.psc.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +20,6 @@ import java.util.UUID;
 import static br.dev.allantoledo.psc.util.PaginationUtility.getValidLimit;
 import static br.dev.allantoledo.psc.util.PaginationUtility.getValidOffset;
 import static br.dev.allantoledo.psc.util.StringUtility.fromString;
-import static java.util.Objects.requireNonNullElse;
 
 @Service
 @RequiredArgsConstructor
@@ -90,14 +86,14 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    private User loadUserByEmail(String email) {
+    private User getUserByEmail(String email) {
         return userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @Override @NullMarked
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return UserLoginInformation.fromUser(loadUserByEmail(username));
+        return UserLoginInformation.fromUser(getUserByEmail(username));
     }
 
     public User getUserById(UUID id) {
@@ -114,5 +110,13 @@ public class UserService implements UserDetailsService {
                 getValidOffset(fromString(Integer.class, params.get("offset"))),
                 getValidLimit(fromString(Integer.class, params.get("limit")))
         );
+    }
+
+    public User updateUserPassword(String email, UserNewPassword userNewPassword) {
+        User user = getUserByEmail(email);
+        String newPassword = encoder.encode(userNewPassword.getNewPassword());
+        user.setPassword(newPassword);
+
+        return userRepository.save(user);
     }
 }
