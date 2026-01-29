@@ -29,7 +29,7 @@ public class AlbumService {
     public Album createAlbum(AlbumCreationForm albumCreationForm) {
         Album album = new Album();
         album.setName(albumCreationForm.getName());
-        Set<Artist> artists = mapToSet(albumCreationForm.getAuthors(), ArtistInformationWithAlbums::toArtist);
+        Set<Artist> artists = mapToSet(albumCreationForm.getAuthors(), ArtistInformation::toArtist);
         album.setAuthors(artists);
 
         return albumRepository.save(album);
