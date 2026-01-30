@@ -3,7 +3,6 @@ package br.dev.allantoledo.psc.service;
 import br.dev.allantoledo.psc.dto.album.AlbumCreationForm;
 import br.dev.allantoledo.psc.dto.album.AlbumUpdateForm;
 import br.dev.allantoledo.psc.dto.artist.ArtistInformation;
-import br.dev.allantoledo.psc.dto.artist.ArtistInformationWithAlbums;
 import br.dev.allantoledo.psc.entity.Album;
 import br.dev.allantoledo.psc.entity.Artist;
 import br.dev.allantoledo.psc.repository.AlbumRepository;
@@ -19,7 +18,6 @@ import static br.dev.allantoledo.psc.util.PaginationUtility.getValidLimit;
 import static br.dev.allantoledo.psc.util.PaginationUtility.getValidOffset;
 import static br.dev.allantoledo.psc.util.StreamUtility.mapToSet;
 import static br.dev.allantoledo.psc.util.StringUtility.fromString;
-import static java.util.Objects.requireNonNullElse;
 
 @Service
 @RequiredArgsConstructor
