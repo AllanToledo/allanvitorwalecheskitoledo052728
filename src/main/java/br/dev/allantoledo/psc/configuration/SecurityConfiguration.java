@@ -29,6 +29,9 @@ public class SecurityConfiguration {
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) ->
                     authorize
+                        .requestMatchers("/error")                     .permitAll()
+                        .requestMatchers("/docs/**")                   .permitAll()
+
                         .requestMatchers(HttpMethod.POST, "/users")    .permitAll()
                         .requestMatchers(HttpMethod.POST, "/recovery") .permitAll()
                         .requestMatchers(HttpMethod.GET,  "/recovery") .permitAll()
