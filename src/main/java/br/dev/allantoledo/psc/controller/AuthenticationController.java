@@ -3,25 +3,14 @@ package br.dev.allantoledo.psc.controller;
 import br.dev.allantoledo.psc.dto.token.RecoveryToken;
 import br.dev.allantoledo.psc.dto.token.TokenInformation;
 import br.dev.allantoledo.psc.dto.user.UserInformation;
-import br.dev.allantoledo.psc.dto.user.UserLoginInformation;
 import br.dev.allantoledo.psc.dto.user.UserNewPassword;
 import br.dev.allantoledo.psc.service.AuthenticationService;
 import br.dev.allantoledo.psc.service.UserService;
-import br.dev.allantoledo.psc.util.SecurityUtility;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.time.ZonedDateTime;
-import java.util.Objects;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
