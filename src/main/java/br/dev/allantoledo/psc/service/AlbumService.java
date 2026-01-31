@@ -31,6 +31,7 @@ public class AlbumService {
     public Album createAlbum(AlbumCreationForm albumCreationForm) {
         Album album = new Album();
         album.setName(albumCreationForm.getName());
+        album.setYear(albumCreationForm.getYear());
         Set<Artist> artists = mapToSet(albumCreationForm.getAuthors(), ArtistInformation::toArtist);
         album.setAuthors(artists);
 
