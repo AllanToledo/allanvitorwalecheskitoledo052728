@@ -9,9 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 @Component
 public class RateLimiterFilter implements Filter {
@@ -33,11 +33,26 @@ public class RateLimiterFilter implements Filter {
             }
             return false;
         }
+
+        public boolean isNew() {
+            return !((System.currentTimeMillis() - lastRefil) > 1000 * 60); // 1 minutos
+        }
     }
+
+    static <K, V> Stream<K> filterMap(Map<K, V> map, Predicate<V> predicate) {
+        return map.entrySet().stream()
+                .filter(entry -> predicate.test(entry.getValue()))
+                .map(Map.Entry::getKey);
+    }
+
 
     @Value("${security.rateLimit}")
     private String rateLimit;
     private final Map<UUID, RateLimiter> rateLimiterMap = new HashMap<>();
+    private synchronized boolean isUserAllowed(UUID id) {
+        filterMap(rateLimiterMap, RateLimiter::isNew).forEach(rateLimiterMap.keySet()::remove);
+        return rateLimiterMap.computeIfAbsent(id, (k) -> new RateLimiter()).allowedAccess();
+    }
 
     @Override
     public void doFilter(
@@ -49,8 +64,7 @@ public class RateLimiterFilter implements Filter {
         if (user == null || !rateLimit.equals("enabled")) {
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
-            RateLimiter rateLimiter = rateLimiterMap.computeIfAbsent(user.getId(), (id) -> new RateLimiter());
-            if (rateLimiter.allowedAccess()) {
+            if (isUserAllowed(user.getId())) {
                 filterChain.doFilter(servletRequest, servletResponse);
             } else {
                 HttpServletResponse response = (HttpServletResponse) servletResponse;
