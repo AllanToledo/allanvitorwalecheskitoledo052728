@@ -6,5 +6,5 @@ import java.util.List;
 
 @Data
 public class AlbumCollection {
-    private List<AlbumInformationWithAuthors> albums;
+    private List<FullAlbumInformation> albums;
 }

@@ -15,10 +15,11 @@ public interface AlbumRepository extends JpaRepository<Album, UUID> {
 
     @Query("""
             SELECT a FROM Album a
-            JOIN FETCH a.authors
+            LEFT JOIN FETCH a.authors
+            LEFT JOIN FETCH a.covers
             WHERE a.id = :id
     """)
-    Optional<Album> findAlbumByIdAndFetchAuthors(UUID id);
+    Optional<Album> findAlbumByIdAndFetchAll(UUID id);
 
     @Query(value = """
         SELECT subselect.id FROM (
@@ -49,8 +50,14 @@ public interface AlbumRepository extends JpaRepository<Album, UUID> {
     //Usando JOIN FETCH resolve o problema de N+1 consultas
     @Query("""
         SELECT a FROM Album a
-        JOIN FETCH a.authors b
+        LEFT JOIN FETCH a.authors b
+        LEFT JOIN FETCH a.covers  c
         WHERE a.id IN :albumsIds ORDER BY a.year
     """)
     List<Album> findAllByIdsAndFetchAuthors(List<UUID> albumsIds);
+
+    @Query("""
+        SELECT a FROM Album a LEFT JOIN FETCH a.covers c WHERE c.id = :idCover
+    """)
+    Optional<Album> getAlbumByCoverId(UUID idCover);
 }

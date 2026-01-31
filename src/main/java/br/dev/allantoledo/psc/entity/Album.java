@@ -22,11 +22,21 @@ public class Album extends GenericEntity{
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "author",
-            joinColumns = @JoinColumn(name = "id_album"),
-            inverseJoinColumns = @JoinColumn(name = "id_artist")
+        name = "author",
+        joinColumns = @JoinColumn(name = "id_album"),
+        inverseJoinColumns = @JoinColumn(name = "id_artist")
     )
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Artist> authors = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "cover",
+        joinColumns = @JoinColumn(name = "id_album"),
+        inverseJoinColumns = @JoinColumn(name = "id_file")
+    )
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<File> covers = new HashSet<>();
 }

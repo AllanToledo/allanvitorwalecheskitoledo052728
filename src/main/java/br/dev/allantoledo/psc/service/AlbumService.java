@@ -5,14 +5,19 @@ import br.dev.allantoledo.psc.dto.album.AlbumUpdateForm;
 import br.dev.allantoledo.psc.dto.artist.ArtistInformation;
 import br.dev.allantoledo.psc.entity.Album;
 import br.dev.allantoledo.psc.entity.Artist;
+import br.dev.allantoledo.psc.entity.File;
 import br.dev.allantoledo.psc.repository.AlbumRepository;
+import br.dev.allantoledo.psc.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static br.dev.allantoledo.psc.util.PaginationUtility.getValidLimit;
 import static br.dev.allantoledo.psc.util.PaginationUtility.getValidOffset;
@@ -23,6 +28,8 @@ import static br.dev.allantoledo.psc.util.StringUtility.fromString;
 @RequiredArgsConstructor
 public class AlbumService {
     final AlbumRepository albumRepository;
+    private final FileService fileService;
+    private final FileRepository fileRepository;
 
     public Album createAlbum(AlbumCreationForm albumCreationForm) {
         Album album = new Album();
@@ -34,8 +41,7 @@ public class AlbumService {
     }
 
     public Album updateAlbum(UUID id, AlbumUpdateForm albumUpdateForm) {
-        Album album = albumRepository.findAlbumByIdAndFetchAuthors(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Album album = getAlbum(id);
 
         if (albumUpdateForm.getName() != null) {
             album.setName(albumUpdateForm.getName().orElse(null));
@@ -76,7 +82,50 @@ public class AlbumService {
 
     @Transactional(readOnly = true)
     public Album getAlbum(UUID id) {
-        return albumRepository.findAlbumByIdAndFetchAuthors(id)
+        return albumRepository.findAlbumByIdAndFetchAll(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @Transactional
+    public Album createCover(UUID id, MultipartFile file) {
+        Album album = getAlbum(id);
+
+        if(file == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        File cover = new File();
+        cover.setBucket("covers");
+        String extension = "bin";
+        if (file.getOriginalFilename() != null) {
+            int extensionBeginIndex = file.getOriginalFilename().lastIndexOf('.') + 1;
+            extension = file.getOriginalFilename().substring(extensionBeginIndex);
+        }
+        cover.setName(String.format("%s.%s", UUID.randomUUID(), extension));
+        cover.setMediaType(file.getContentType());
+
+        try {
+            cover = fileService.save(cover, file);
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        album.getCovers().add(cover);
+        return albumRepository.save(album);
+    }
+
+    public Album deleteCover(UUID id) {
+        Album album = albumRepository.getAlbumByCoverId(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        album.setCovers(
+            album.getCovers()
+            .stream()
+            .filter(f -> !f.getId().equals(id))
+            .collect(Collectors.toSet())
+        );
+
+        fileService.delete(id);
+
+        return albumRepository.save(album);
     }
 }

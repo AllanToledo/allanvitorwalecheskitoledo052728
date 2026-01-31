@@ -38,7 +38,7 @@ public interface ArtistRepository extends JpaRepository<Artist, UUID> {
     //Usando JOIN FETCH resolve o problema de N+1 consultas
     @Query("""
         SELECT a FROM Artist a
-        JOIN FETCH a.albums b
+        LEFT JOIN FETCH a.albums b
         WHERE a.id IN :artistsIds ORDER BY a.name
     """)
     List<Artist> findAllByIdsAndFetchAlbums(List<UUID> artistsIds);

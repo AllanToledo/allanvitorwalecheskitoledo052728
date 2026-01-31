@@ -2,7 +2,7 @@ package br.dev.allantoledo.psc.controller;
 
 import br.dev.allantoledo.psc.dto.album.AlbumCollection;
 import br.dev.allantoledo.psc.dto.album.AlbumCreationForm;
-import br.dev.allantoledo.psc.dto.album.AlbumInformationWithAuthors;
+import br.dev.allantoledo.psc.dto.album.FullAlbumInformation;
 import br.dev.allantoledo.psc.dto.album.AlbumUpdateForm;
 import br.dev.allantoledo.psc.entity.Album;
 import br.dev.allantoledo.psc.service.AlbumService;
@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -31,8 +32,8 @@ public class AlbumController {
             description = "Requer token de administrador."
     )
     @PostMapping("/albums")
-    public AlbumInformationWithAuthors createAlbum(@RequestBody AlbumCreationForm albumCreationForm) {
-        return AlbumInformationWithAuthors.fromAlbum(albumService.createAlbum(albumCreationForm));
+    public FullAlbumInformation createAlbum(@RequestBody AlbumCreationForm albumCreationForm) {
+        return FullAlbumInformation.fromAlbum(albumService.createAlbum(albumCreationForm));
     }
 
     @Operation(
@@ -40,12 +41,37 @@ public class AlbumController {
             description = "Requer token de administrador."
     )
     @PutMapping("/albums/{id}")
-    public AlbumInformationWithAuthors updateAlbum(
+    public FullAlbumInformation updateAlbum(
             @PathVariable UUID id,
             @RequestBody AlbumUpdateForm albumUpdateForm
     ) {
-        return AlbumInformationWithAuthors.fromAlbum(albumService.updateAlbum(id, albumUpdateForm));
+        return FullAlbumInformation.fromAlbum(albumService.updateAlbum(id, albumUpdateForm));
     }
+
+    @Operation(
+            summary = "Cadastra uma nova capa ao álbum.",
+            description = "Requer token de administrador."
+    )
+    @PostMapping("/albums/{id}/covers")
+    public FullAlbumInformation createAlbum(
+            @PathVariable UUID id,
+            @RequestParam("file") MultipartFile file
+    ) {
+        return FullAlbumInformation.fromAlbum(albumService.createCover(id, file));
+    }
+
+    @Operation(
+            summary = "Deleta a capa especificada.",
+            description = "Requer token de administrador."
+    )
+    @DeleteMapping("/covers/{id}")
+    public FullAlbumInformation createAlbum(
+            @PathVariable UUID id
+    ) {
+        return FullAlbumInformation.fromAlbum(albumService.deleteCover(id));
+    }
+
+
 
     @Operation(
             summary = "Lista os artistas.",
@@ -99,7 +125,7 @@ public class AlbumController {
         List<Album> albums = albumService.getAlbumCollection(params);
 
         AlbumCollection albumCollection = new AlbumCollection();
-        albumCollection.setAlbums(mapToList(albums, AlbumInformationWithAuthors::fromAlbum));
+        albumCollection.setAlbums(mapToList(albums, FullAlbumInformation::fromAlbum));
 
         return albumCollection;
     }
@@ -109,8 +135,8 @@ public class AlbumController {
             description = "Requer token de usuário ou administrador."
     )
     @GetMapping("/albums/{id}")
-    public AlbumInformationWithAuthors getAlbum(@PathVariable UUID id) {
-        return AlbumInformationWithAuthors.fromAlbum(albumService.getAlbum(id));
+    public FullAlbumInformation getAlbum(@PathVariable UUID id) {
+        return FullAlbumInformation.fromAlbum(albumService.getAlbum(id));
     }
 
 }
