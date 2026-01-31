@@ -1,5 +1,6 @@
 package br.dev.allantoledo.psc.configuration;
 
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -18,8 +21,8 @@ import java.nio.charset.StandardCharsets;
 import static br.dev.allantoledo.psc.util.SecurityUtility.Scopes.*;
 import static org.springframework.security.oauth2.core.authorization.OAuth2AuthorizationManagers.hasScope;
 
-@EnableWebSecurity
 @Configuration
+@EnableWebSecurity
 public class SecurityConfiguration {
 
     @Bean
@@ -78,5 +81,23 @@ public class SecurityConfiguration {
     public JwtEncoder jwtEncoder() {
         SecretKey key = new SecretKeySpec(jwtSecret.getBytes(StandardCharsets.UTF_8), "HS256");
         return NimbusJwtEncoder.withSecretKey(key).build();
+    }
+
+    @Value("${security.allowedOrigins}")
+    private String allowedOrigins;
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(@NonNull CorsRegistry registry) {
+                String[] origins = allowedOrigins.split(" ");
+                registry
+                    .addMapping("/**")
+                    .allowedOrigins(origins)
+                    .allowedMethods("POST", "GET", "PUT", "DELETE")
+                    .allowCredentials(true);
+            }
+        };
     }
 }
