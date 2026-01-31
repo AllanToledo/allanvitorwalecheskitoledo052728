@@ -37,7 +37,7 @@ public class SecurityUtility {
     public static UserLoginInformation getUserLoginInformation() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
-        assert authentication != null;
+        if (authentication == null) return null;
         assert authentication.getPrincipal() != null;
 
         if (authentication.getPrincipal() instanceof UserLoginInformation) {

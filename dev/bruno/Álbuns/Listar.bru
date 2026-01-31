@@ -5,13 +5,14 @@ meta {
 }
 
 get {
-  url: http://localhost:8080/albums?artistNameLike=%nunes%
+  url: http://localhost:8080/api/v1/albums?albumNameLike=%esquina%
   body: none
   auth: inherit
 }
 
 params:query {
-  artistNameLike: %nunes%
+  albumNameLike: %esquina%
+  ~artistNameLike: 
 }
 
 body:json {

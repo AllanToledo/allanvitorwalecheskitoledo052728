@@ -5,9 +5,21 @@ meta {
 }
 
 post {
-  url: http://localhost:8080/albums/00000000-0000-0000-0000-000000000046/covers
-  body: file
+  url: http://localhost:8080/api/v1/albums/00000000-0000-0000-0000-000000000046/covers
+  body: multipartForm
   auth: inherit
+}
+
+params:query {
+  ~file: 
+}
+
+headers {
+  Origin: http://localhost:8080
+}
+
+body:multipart-form {
+  file: @file(/Users/allantoledo/Downloads/clube-da-esquina.jpeg) @contentType(image/jpeg)
 }
 
 body:file {

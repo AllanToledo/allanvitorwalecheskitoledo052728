@@ -4,6 +4,7 @@ import br.dev.allantoledo.psc.dto.token.TokenInformation;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.client.RestTestClient;
@@ -19,7 +20,8 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(webEnvironment = DEFINED_PORT)
 @TestPropertySource(properties = {
         "server.port=8081",
-        "security.allowedOrigins=http://localhost:8081"
+        "security.allowedOrigins=http://localhost:8081",
+        "security.rateLimit=disabled"
 })
 public class ApplicationTests {
 
