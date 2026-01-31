@@ -126,7 +126,7 @@ Claro, com exceção da rota "/users/me", que **não deve ser armazenada na cach
 - [x] l) Documentar endpoints com OpenAPI/Swagger.
 #### Requisitos apenas para Sênior:
 - [x] a) Health Checks e Liveness/Readiness.
-- [ ] b) Testes unitários.
+- [x] b) Testes unitários.
 - [ ] c) WebSocket para notificar o front a cada novo álbum cadastrado.
 - [ ] d) Rate limit: até 10 requisições por minuto por usuário.
 - [ ] e) Endpoint de regionais (https://integrador-argus-api.geia.vip/v1/regionais):
