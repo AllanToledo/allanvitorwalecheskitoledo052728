@@ -35,7 +35,7 @@ public class ApplicationTests {
         String encoded = Base64.getEncoder().encodeToString(bytes);
         TokenInformation tokenInformation =  client
             .get()
-            .uri("/token")
+            .uri("/api/v1/token")
             .headers(headers -> {
                 headers.add("Authorization", "Basic " + encoded);
             })
@@ -52,7 +52,7 @@ public class ApplicationTests {
 
         client
             .get()
-            .uri("/token")
+            .uri("/api/v1/token")
             .headers(headers -> {
                 headers.add("Authorization", "Basic " + encoded);
             })
@@ -74,7 +74,7 @@ public class ApplicationTests {
 
         client
             .get()
-            .uri("/token")
+            .uri("/api/v1/token")
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + token);
             })
@@ -105,7 +105,7 @@ public class ApplicationTests {
 
         client
             .post()
-            .uri("/users")
+            .uri("/api/v1/users")
             .contentType(MediaType.APPLICATION_JSON)
             .body(body)
             .exchange()
@@ -126,7 +126,7 @@ public class ApplicationTests {
 
         client
             .get()
-            .uri("/users/me")
+            .uri("/api/v1/users/me")
             .headers(headers -> {
                 headers.add("Authorization", "Basic " + encoded);
             })
@@ -149,7 +149,7 @@ public class ApplicationTests {
         String newName = "teste";
         client
             .put()
-            .uri("/users/me")
+            .uri("/api/v1/users/me")
             .headers(headers -> {
                 headers.add("Authorization", "Basic " + encoded);
             })
@@ -170,7 +170,7 @@ public class ApplicationTests {
 
         client
             .put()
-            .uri("/users/me")
+            .uri("/api/v1/users/me")
             .headers(headers -> {
                 headers.add("Authorization", "Basic " + encoded);
             })
@@ -209,7 +209,7 @@ public class ApplicationTests {
         AtomicReference<String> newUserId = new AtomicReference<>();
         client
             .post()
-            .uri("/users")
+            .uri("/api/v1/users")
             .contentType(MediaType.APPLICATION_JSON)
             .body(body)
             .exchange()
@@ -223,7 +223,7 @@ public class ApplicationTests {
 
         client
             .put()
-            .uri(String.format("/users/%s", newUserId.get()))
+            .uri(String.format("/api/v1/users/%s", newUserId.get()))
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + adminToken);
             })
@@ -244,7 +244,7 @@ public class ApplicationTests {
         String token = getTokenForUser("admin@admin.br", "123456");
         client
             .get()
-            .uri("/users")
+            .uri("/api/v1/users")
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + token);
             })
@@ -258,7 +258,7 @@ public class ApplicationTests {
         String token = getTokenForUser("teste@teste.br", "123456");
         client
             .get()
-            .uri("/users")
+            .uri("/api/v1/users")
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + token);
             })
@@ -271,7 +271,7 @@ public class ApplicationTests {
         RestTestClient client = getTestClient();
         client
             .get()
-            .uri("/artists")
+            .uri("/api/v1/artists")
             .exchange()
             .expectStatus().isUnauthorized();
     }
@@ -282,7 +282,7 @@ public class ApplicationTests {
         String token = getTokenForUser("teste@teste.br", "123456");
         client
             .get()
-            .uri("/artists")
+            .uri("/api/v1/artists")
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + token);
             })
@@ -295,7 +295,7 @@ public class ApplicationTests {
         RestTestClient client = getTestClient();
         client
             .get()
-            .uri("/albums")
+            .uri("/api/v1/albums")
             .exchange()
             .expectStatus().isUnauthorized();
     }
@@ -306,7 +306,7 @@ public class ApplicationTests {
         String token = getTokenForUser("teste@teste.br", "123456");
         client
             .get()
-            .uri("/albums")
+            .uri("/api/v1/albums")
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + token);
             })
@@ -322,7 +322,7 @@ public class ApplicationTests {
 
         client
             .get()
-            .uri("/artists?limit=1")
+            .uri("/api/v1/artists?limit=1")
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + token);
             })
@@ -332,7 +332,7 @@ public class ApplicationTests {
             .jsonPath("$.artists[0].id").value(artistId -> {
                 client
                     .get()
-                    .uri("/artists/" + artistId)
+                    .uri("/api/v1/artists/" + artistId)
                     .headers(headers -> {
                         headers.add("Authorization", "Bearer " + token);
                     })
@@ -357,7 +357,7 @@ public class ApplicationTests {
 
         client
             .post()
-            .uri("/artists")
+            .uri("/api/v1/artists")
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + adminToken);
             })
@@ -376,7 +376,7 @@ public class ApplicationTests {
 
         client
             .put()
-            .uri("/artists/" + artistId.get())
+            .uri("/api/v1/artists/" + artistId.get())
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + adminToken);
             })
@@ -405,7 +405,7 @@ public class ApplicationTests {
             int finalI = i;
             client
                 .post()
-                .uri("/artists")
+                .uri("/api/v1/artists")
                 .headers(headers -> {
                     headers.add("Authorization", "Bearer " + adminToken);
                 })
@@ -426,7 +426,7 @@ public class ApplicationTests {
 
         client
             .post()
-            .uri("/albums")
+            .uri("/api/v1/albums")
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + adminToken);
             })
@@ -461,7 +461,7 @@ public class ApplicationTests {
 
         client
             .get()
-            .uri("/artists?artistNameLike=" + searchTerm + "&limit=10")
+            .uri("/api/v1/artists?artistNameLike=" + searchTerm + "&limit=10")
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + token);
             })
@@ -481,7 +481,7 @@ public class ApplicationTests {
 
         client
             .get()
-            .uri("/albums?albumYearAfter=" + yearAfter + "&albumYearBefore=" + yearBefore)
+            .uri("/api/v1/albums?albumYearAfter=" + yearAfter + "&albumYearBefore=" + yearBefore)
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + token);
             })
@@ -499,7 +499,7 @@ public class ApplicationTests {
         // Primeiro lista os álbuns para obter um ID válido
         client
             .get()
-            .uri("/albums?limit=1")
+            .uri("/api/v1/albums?limit=1")
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + token);
             })
@@ -509,7 +509,7 @@ public class ApplicationTests {
             .jsonPath("$.albums[0].id").value(albumId -> {
                 client
                 .get()
-                .uri("/albums/" + albumId)
+                .uri("/api/v1/albums/" + albumId)
                 .headers(headers -> {
                     headers.add("Authorization", "Bearer " + token);
                 })
@@ -532,7 +532,7 @@ public class ApplicationTests {
         AtomicReference<String> artistId = new AtomicReference<>();
         client
             .post()
-            .uri("/artists")
+            .uri("/api/v1/artists")
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + adminToken);
             })
@@ -553,7 +553,7 @@ public class ApplicationTests {
 
         client
             .post()
-            .uri("/albums")
+            .uri("/api/v1/albums")
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + adminToken);
             })
@@ -575,7 +575,7 @@ public class ApplicationTests {
 
         client
             .put()
-            .uri("/albums/" + albumId.get())
+            .uri("/api/v1/albums/" + albumId.get())
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + adminToken);
             })
@@ -601,7 +601,7 @@ public class ApplicationTests {
 
         client
             .get()
-            .uri("/artists?limit=150")
+            .uri("/api/v1/artists?limit=150")
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + token);
             })
@@ -610,7 +610,7 @@ public class ApplicationTests {
 
         client
             .get()
-            .uri("/artists?offset=10&limit=20")
+            .uri("/api/v1/artists?offset=10&limit=20")
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + token);
             })
@@ -626,7 +626,7 @@ public class ApplicationTests {
 
         client
             .get()
-            .uri("/recovery?email=" + email)
+            .uri("/api/v1/recovery?email=" + email)
             .exchange()
             .expectStatus().isOk()
             .expectBody()
@@ -641,7 +641,7 @@ public class ApplicationTests {
 
         client
             .get()
-            .uri("/users?limit=1")
+            .uri("/api/v1/users?limit=1")
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + adminToken);
             })
@@ -651,7 +651,7 @@ public class ApplicationTests {
                 .jsonPath("$.users[0].id").value(userId -> {
                     client
                         .get()
-                        .uri("/users/" + userId)
+                        .uri("/api/v1/users/" + userId)
                         .headers(headers -> {
                             headers.add("Authorization", "Bearer " + adminToken);
                         })
@@ -675,7 +675,7 @@ public class ApplicationTests {
         AtomicReference<String> userId = new AtomicReference<>();
         client
             .post()
-            .uri("/users")
+            .uri("/api/v1/users")
             .contentType(MediaType.APPLICATION_JSON)
             .body("""
             {
@@ -691,7 +691,7 @@ public class ApplicationTests {
 
         client
             .put()
-            .uri("/users/" + userId.get())
+            .uri("/api/v1/users/" + userId.get())
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + adminToken);
             })
@@ -717,7 +717,7 @@ public class ApplicationTests {
 
         client
             .post()
-            .uri("/artists")
+            .uri("/api/v1/artists")
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + userToken);
             })
@@ -739,7 +739,7 @@ public class ApplicationTests {
 
         client
             .put()
-            .uri("/albums/" + fakeAlbumId)
+            .uri("/api/v1/albums/" + fakeAlbumId)
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + userToken);
             })
@@ -760,7 +760,7 @@ public class ApplicationTests {
 
         client
             .get()
-            .uri("/users?isAdminEqual=true")
+            .uri("/api/v1/users?isAdminEqual=true")
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + adminToken);
             })
@@ -771,7 +771,7 @@ public class ApplicationTests {
 
         client
             .get()
-            .uri("/users?nameLike=%25admin%25")
+            .uri("/api/v1/users?nameLike=%25admin%25")
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + adminToken);
             })
@@ -782,7 +782,7 @@ public class ApplicationTests {
 
         client
             .get()
-            .uri("/users?emailLike=%25admin%25")
+            .uri("/api/v1/users?emailLike=%25admin%25")
             .headers(headers -> {
                 headers.add("Authorization", "Bearer " + adminToken);
             })

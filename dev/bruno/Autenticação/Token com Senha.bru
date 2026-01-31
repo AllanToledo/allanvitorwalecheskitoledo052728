@@ -5,14 +5,18 @@ meta {
 }
 
 get {
-  url: http://localhost:8080/token
+  url: http://localhost:8080/api/v1/token
   body: none
   auth: basic
 }
 
+headers {
+  Origin: http://localhost:8080
+}
+
 auth:basic {
   username: admin@admin.br
-  password: teste
+  password: 123456
 }
 
 settings {
