@@ -7,7 +7,6 @@ import br.dev.allantoledo.psc.repository.ArtistRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.UUID;
 import static br.dev.allantoledo.psc.util.PaginationUtility.getValidLimit;
 import static br.dev.allantoledo.psc.util.PaginationUtility.getValidOffset;
 import static br.dev.allantoledo.psc.util.StringUtility.fromString;
-import static java.util.Objects.requireNonNullElse;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +42,6 @@ public class ArtistService {
         return artistRepository.save(artist);
     }
 
-    @Transactional(readOnly = true)
     public List<Artist> getArtistCollection(Map<String, String> params) {
         List<UUID> ids = artistRepository.findAllArtistsByParams(
                 fromString(String.class, params.get("artistNameLike")),
@@ -59,7 +56,6 @@ public class ArtistService {
         return artistRepository.findAllByIdsAndFetchAlbums(ids);
     }
 
-    @Transactional(readOnly = true)
     public Artist getArtist(UUID id) {
         return artistRepository
                 .findById(id)

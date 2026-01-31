@@ -1,6 +1,5 @@
 package br.dev.allantoledo.psc.repository;
 
-import br.dev.allantoledo.psc.entity.Album;
 import br.dev.allantoledo.psc.entity.Artist;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

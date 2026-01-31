@@ -7,11 +7,9 @@ import br.dev.allantoledo.psc.entity.Album;
 import br.dev.allantoledo.psc.entity.Artist;
 import br.dev.allantoledo.psc.entity.File;
 import br.dev.allantoledo.psc.repository.AlbumRepository;
-import br.dev.allantoledo.psc.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -29,7 +27,6 @@ import static br.dev.allantoledo.psc.util.StringUtility.fromString;
 public class AlbumService {
     final AlbumRepository albumRepository;
     private final FileService fileService;
-    private final FileRepository fileRepository;
 
     public Album createAlbum(AlbumCreationForm albumCreationForm) {
         Album album = new Album();
@@ -64,7 +61,6 @@ public class AlbumService {
         return albumRepository.save(album);
     }
 
-    @Transactional(readOnly = true)
     public List<Album> getAlbumCollection(Map<String, String> params) {
         List<UUID> ids = albumRepository.findAllAlbumsByParams(
                 fromString(String.class, params.get("artistNameLike")),
@@ -80,13 +76,11 @@ public class AlbumService {
         return albumRepository.findAllByIdsAndFetchAuthors(ids);
     }
 
-    @Transactional(readOnly = true)
     public Album getAlbum(UUID id) {
         return albumRepository.findAlbumByIdAndFetchAll(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    @Transactional
     public Album createCover(UUID id, MultipartFile file) {
         Album album = getAlbum(id);
 
