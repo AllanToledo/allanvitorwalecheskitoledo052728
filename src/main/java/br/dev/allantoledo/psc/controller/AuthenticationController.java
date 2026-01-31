@@ -31,7 +31,7 @@ public class AuthenticationController {
                     Cada token é individual e intransferível.
                     """
     )
-    @GetMapping("/token")
+    @GetMapping("/v1/token")
     public TokenInformation getToken() {
         return authenticationService.createAccessToken();
     }
@@ -43,7 +43,7 @@ public class AuthenticationController {
                     acesso a conta alterando a senha.
                     """
     )
-    @PutMapping("/recovery")
+    @PutMapping("/v1/recovery")
     public UserInformation recoveryAccess(
             @RequestParam String token,
             @RequestBody UserNewPassword userNewPassword
@@ -59,7 +59,7 @@ public class AuthenticationController {
                     O link é idealmente enviado por email e permite o usuário definir uma nova senha.
                     """
     )
-    @GetMapping("/recovery")
+    @GetMapping("/v1/recovery")
     public RecoveryToken getRecoveryLink(@RequestParam() String email) {
         return authenticationService.createRecoveryToken(email);
     }

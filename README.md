@@ -121,7 +121,7 @@ Claro, com exceção da rota "/users/me", que **não deve ser armazenada na cach
 - [x] g) Upload de uma ou mais imagens de capa do álbum.
 - [x] h) Armazenamento das imagens no MinIO (API S3).
 - [x] i) Recuperação por links pré-assinados com expiração de 30 minutos.
-- [ ] j) Versionar endpoints.
+- [x] j) Versionar endpoints.
 - [x] k) Flyway Migrations para criar e popular tabelas.
 - [x] l) Documentar endpoints com OpenAPI/Swagger.
 #### Requisitos apenas para Sênior:

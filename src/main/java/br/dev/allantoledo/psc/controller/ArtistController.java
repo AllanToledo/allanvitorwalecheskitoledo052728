@@ -27,7 +27,7 @@ public class ArtistController {
             summary = "Cadastra um novo artista.",
             description = "Requer token de administrador."
     )
-    @PostMapping("/artists")
+    @PostMapping("/v1/artists")
     public ArtistInformationWithAlbums createArtist(
             @RequestBody ArtistCreationForm artistCreationForm
     ) {
@@ -38,7 +38,7 @@ public class ArtistController {
             summary = "Atualiza um artista.",
             description = "Requer token de administrador."
     )
-    @PutMapping("/artists/{id}")
+    @PutMapping("/v1/artists/{id}")
     public ArtistInformationWithAlbums updateArtist(
             @PathVariable UUID id,
             @RequestBody ArtistUpdateForm artistUpdateForm
@@ -91,7 +91,7 @@ public class ArtistController {
                             ))
             }
     )
-    @GetMapping("/artists")
+    @GetMapping("/v1/artists")
     public ArtistCollection getArtistCollection(
             @RequestParam @Parameter(hidden = true) Map<String, String> params
     ) {
@@ -107,7 +107,7 @@ public class ArtistController {
             summary = "Busca um artista por identificador.",
             description = "Requer token de usuário ou administrador."
     )
-    @GetMapping("/artists/{id}")
+    @GetMapping("/v1/artists/{id}")
     public ArtistInformationWithAlbums getArtistInformation(@PathVariable UUID id) {
         return ArtistInformationWithAlbums.fromArtist(artistService.getArtist(id));
     }

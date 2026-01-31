@@ -31,7 +31,7 @@ public class AlbumController {
             summary = "Cadastra um novo álbum.",
             description = "Requer token de administrador."
     )
-    @PostMapping("/albums")
+    @PostMapping("/v1/albums")
     public FullAlbumInformation createAlbum(@RequestBody AlbumCreationForm albumCreationForm) {
         return FullAlbumInformation.fromAlbum(albumService.createAlbum(albumCreationForm));
     }
@@ -40,7 +40,7 @@ public class AlbumController {
             summary = "Atualiza um novo álbum.",
             description = "Requer token de administrador."
     )
-    @PutMapping("/albums/{id}")
+    @PutMapping("/v1/albums/{id}")
     public FullAlbumInformation updateAlbum(
             @PathVariable UUID id,
             @RequestBody AlbumUpdateForm albumUpdateForm
@@ -52,7 +52,7 @@ public class AlbumController {
             summary = "Cadastra uma nova capa ao álbum.",
             description = "Requer token de administrador."
     )
-    @PostMapping("/albums/{id}/covers")
+    @PostMapping("/v1/albums/{id}/covers")
     public FullAlbumInformation createAlbum(
             @PathVariable UUID id,
             @RequestParam("file") MultipartFile file
@@ -64,7 +64,7 @@ public class AlbumController {
             summary = "Deleta a capa especificada.",
             description = "Requer token de administrador."
     )
-    @DeleteMapping("/covers/{id}")
+    @DeleteMapping("/v1/covers/{id}")
     public FullAlbumInformation createAlbum(
             @PathVariable UUID id
     ) {
@@ -118,7 +118,7 @@ public class AlbumController {
                             ))
             }
     )
-    @GetMapping("/albums")
+    @GetMapping("/v1/albums")
     public AlbumCollection getAlbumCollection(
             @RequestParam @Parameter(hidden = true) Map<String, String> params
     ) {
@@ -134,7 +134,7 @@ public class AlbumController {
             summary = "Busca um álbum por identificador.",
             description = "Requer token de usuário ou administrador."
     )
-    @GetMapping("/albums/{id}")
+    @GetMapping("/v1/albums/{id}")
     public FullAlbumInformation getAlbum(@PathVariable UUID id) {
         return FullAlbumInformation.fromAlbum(albumService.getAlbum(id));
     }

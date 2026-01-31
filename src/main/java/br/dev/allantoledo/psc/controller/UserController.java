@@ -29,7 +29,7 @@ public class UserController {
                     ao perfil de administrador caso seja necessário.
                     """
     )
-    @PostMapping("/users")
+    @PostMapping("/v1/users")
     public UserInformation createUser(@RequestBody UserCreationForm userCreationForm) {
         return UserInformation.fromUser(userService.createUser(userCreationForm));
     }
@@ -40,7 +40,7 @@ public class UserController {
                     A rota utiliza informações de login para carregar dados do próprio usuário.
                     """
     )
-    @GetMapping("/users/me")
+    @GetMapping("/v1/users/me")
     public UserInformation getSelf() {
         UserLoginInformation userLoginInformation = SecurityUtility.getUserLoginInformation();
         assert userLoginInformation != null;
@@ -54,7 +54,7 @@ public class UserController {
                     A rota utiliza informações de login para atualizar os dados do próprio usuário.
                     """
     )
-    @PutMapping("/users/me")
+    @PutMapping("/v1/users/me")
     public UserInformation secureUpdateUser(
             @RequestBody SecureUserUpdateForm secureUserUpdateForm
     ) {
@@ -91,7 +91,7 @@ public class UserController {
                             ))
             }
     )
-    @GetMapping("/users")
+    @GetMapping("/v1/users")
     public UserCollection getUserCollection(
             @RequestParam @Parameter(hidden = true) Map<String, String> params
     ) {
@@ -105,7 +105,7 @@ public class UserController {
             summary = "Busca dos dados de um usuário por ID",
             description = "Requer token de administrador"
     )
-    @GetMapping("/users/{id}")
+    @GetMapping("/v1/users/{id}")
     public UserInformation getUserCollection(@PathVariable UUID id) {
         return UserInformation.fromUser(userService.getUserById(id));
     }
@@ -114,7 +114,7 @@ public class UserController {
             summary = "Atualiza os dados de um usuário",
             description = "Requer token de administrador"
     )
-    @PutMapping("/users/{id}")
+    @PutMapping("/v1/users/{id}")
     public UserInformation adminUpdateUser(
             @PathVariable UUID id,
             @RequestBody UserUpdateAdminForm userUpdateAdminForm
