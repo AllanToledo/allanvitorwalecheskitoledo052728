@@ -1,0 +1,28 @@
+meta {
+  name: Deletar Capa
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://localhost:8080/albums/00000000-0000-0000-0000-000000000046/covers
+  body: multipartForm
+  auth: inherit
+}
+
+params:query {
+  ~file: 
+}
+
+body:multipart-form {
+  file: @file(/Users/allantoledo/Downloads/clube-da-esquina.jpeg) @contentType(image/jpeg)
+}
+
+body:file {
+  file: @file(/Users/allantoledo/Downloads/clube-da-esquina.jpeg) @contentType(image/jpeg)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
