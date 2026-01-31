@@ -104,3 +104,35 @@ Nenhuma operação de segurança é realizada após a validação do acesso do u
 Desta forma, o cache pode ser feita de maneira simples e eficiente: se um determinado 
 token possuí acesso ao recurso, qualquer resposta já armazenada em cache é segura de ser compartilhada.\
 Claro, com exceção da rota "/users/me", que **não deve ser armazenada na cache.**
+
+
+### Checklist dos requisitos
+
+#### Pré-requisitos:
+- [x] a) Leia todo o documento antes de iniciar.
+- [x] b) Java (Spring Boot ou Quarkus).
+#### Requisitos Gerais:
+- [x] a) Segurança: bloquear acesso ao endpoint a partir de domínios fora do domínio do serviço.
+- [x] b) Autenticação JWT com expiração a cada 5 minutos e possibilidade de renovação.
+- [x] c) Implementar POST, PUT, GET.
+- [x] d) Paginação na consulta dos álbuns.
+- [x] e) Expor quais álbuns são/tem cantores e/ou bandas (consultas parametrizadas).
+- [x] f) Consultas por nome do artista com ordenação alfabética (asc/desc).
+- [x] g) Upload de uma ou mais imagens de capa do álbum.
+- [x] h) Armazenamento das imagens no MinIO (API S3).
+- [x] i) Recuperação por links pré-assinados com expiração de 30 minutos.
+- [ ] j) Versionar endpoints.
+- [x] k) Flyway Migrations para criar e popular tabelas.
+- [x] l) Documentar endpoints com OpenAPI/Swagger.
+#### Requisitos apenas para Sênior:
+- [x] a) Health Checks e Liveness/Readiness.
+- [ ] b) Testes unitários.
+- [ ] c) WebSocket para notificar o front a cada novo álbum cadastrado.
+- [ ] d) Rate limit: até 10 requisições por minuto por usuário.
+- [ ] e) Endpoint de regionais (https://integrador-argus-api.geia.vip/v1/regionais):
+- - [ ] i) Importar a lista para tabela interna;
+- - [ ] ii) Adicionar atributo “ativo” (regional (id integer, nome varchar(200), ativo boolean));
+- - [ ] iii) Sincronizar com menor complexidade:
+- - - [ ] 1\) Novo no endpoint → inserir;
+- - - [ ] 2\) Ausente no endpoint → inativar;
+- - - [ ] 3\) Atributo alterado → inativar antigo e criar novo registro.
