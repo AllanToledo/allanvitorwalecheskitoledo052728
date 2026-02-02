@@ -127,7 +127,7 @@ Claro, com exceção da rota "/users/me", que **não deve ser armazenada na cach
 #### Requisitos apenas para Sênior:
 - [x] a) Health Checks e Liveness/Readiness.
 - [x] b) Testes unitários.
-- [ ] c) WebSocket para notificar o front a cada novo álbum cadastrado.
+- [x] c) WebSocket para notificar o front a cada novo álbum cadastrado.
 - [x] d) Rate limit: até 10 requisições por minuto por usuário.
 - [ ] e) Endpoint de regionais (https://integrador-argus-api.geia.vip/v1/regionais):
 - - [ ] i) Importar a lista para tabela interna;
