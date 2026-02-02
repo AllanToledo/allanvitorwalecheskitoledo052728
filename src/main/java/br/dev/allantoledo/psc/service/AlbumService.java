@@ -1,14 +1,17 @@
 package br.dev.allantoledo.psc.service;
 
 import br.dev.allantoledo.psc.dto.album.AlbumCreationForm;
+import br.dev.allantoledo.psc.dto.album.AlbumInformation;
 import br.dev.allantoledo.psc.dto.album.AlbumUpdateForm;
 import br.dev.allantoledo.psc.dto.artist.ArtistInformation;
+import br.dev.allantoledo.psc.dto.websocket.Payload;
 import br.dev.allantoledo.psc.entity.Album;
 import br.dev.allantoledo.psc.entity.Artist;
 import br.dev.allantoledo.psc.entity.File;
 import br.dev.allantoledo.psc.repository.AlbumRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,8 +28,9 @@ import static br.dev.allantoledo.psc.util.StringUtility.fromString;
 @Service
 @RequiredArgsConstructor
 public class AlbumService {
-    final AlbumRepository albumRepository;
+    private final AlbumRepository albumRepository;
     private final FileService fileService;
+    private final SimpMessagingTemplate template;
 
     public Album createAlbum(AlbumCreationForm albumCreationForm) {
         Album album = new Album();
@@ -35,7 +39,12 @@ public class AlbumService {
         Set<Artist> artists = mapToSet(albumCreationForm.getAuthors(), ArtistInformation::toArtist);
         album.setAuthors(artists);
 
-        return albumRepository.save(album);
+        album =  albumRepository.save(album);
+        //notifica os usuários da criação do novo álbum
+        Payload payload = Payload.fromData(AlbumInformation.fromAlbum(album));
+        template.convertAndSend("/notifications/albums", payload);
+
+        return album;
     }
 
     public Album updateAlbum(UUID id, AlbumUpdateForm albumUpdateForm) {

@@ -71,6 +71,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.PUT,    "/v1/albums/*") .access(hasScope(EDIT_COLLECTION.name()))
 
                         .requestMatchers(HttpMethod.GET,    "/v1/files/**") .access(hasScope(ACCESS_COLLECTION.name()))
+                        .requestMatchers(                   "/ws")          .access(hasScope(ACCESS_COLLECTION.name()))
                 )
                 .httpBasic(Customizer.withDefaults())
                 .oauth2ResourceServer(oauth2 -> oauth2

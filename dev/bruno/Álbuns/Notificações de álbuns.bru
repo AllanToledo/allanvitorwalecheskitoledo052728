@@ -1,0 +1,23 @@
+meta {
+  name: Notificações de álbuns
+  type: ws
+  seq: 7
+}
+
+ws {
+  url: ws://localhost:8080/api/ws
+  body: ws
+  auth: none
+}
+
+headers {
+  Origin: http://localhost
+}
+
+body:ws {
+  name: message 1
+  type: json
+  content: '''
+    ["CONNECT\n\n\u0000"]
+  '''
+}
