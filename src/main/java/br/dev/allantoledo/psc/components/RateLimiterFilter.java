@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -19,10 +20,10 @@ public class RateLimiterFilter implements Filter {
     private static class RateLimiter {
         private int accessCount = 0;
         private long lastRefil = 0;
+        private final static long duration = (1000 * 60);
 
         public synchronized boolean allowedAccess() {
-            long timeToReset = 1000 * 60; // 1 minuto
-            if ((System.currentTimeMillis() - lastRefil) >= timeToReset) {
+            if ((System.currentTimeMillis() - lastRefil) >= duration) {
                 lastRefil = System.currentTimeMillis();
                 accessCount = 10;
             }
@@ -34,8 +35,8 @@ public class RateLimiterFilter implements Filter {
             return false;
         }
 
-        public boolean isNew() {
-            return !((System.currentTimeMillis() - lastRefil) > 1000 * 60); // 1 minutos
+        public boolean isOld() {
+            return (System.currentTimeMillis() - lastRefil) > duration; // 1 minutos
         }
     }
 
@@ -48,9 +49,13 @@ public class RateLimiterFilter implements Filter {
 
     @Value("${security.rateLimit}")
     private String rateLimit;
-    private final Map<UUID, RateLimiter> rateLimiterMap = new HashMap<>();
+    private final Map<UUID, RateLimiter> rateLimiterMap = new ConcurrentHashMap<>();
+    private long lastCheck = 0;
     private synchronized boolean isUserAllowed(UUID id) {
-        filterMap(rateLimiterMap, RateLimiter::isNew).forEach(rateLimiterMap.keySet()::remove);
+        if ((System.currentTimeMillis() - lastCheck) > RateLimiter.duration) {
+            lastCheck = System.currentTimeMillis();
+            filterMap(rateLimiterMap, RateLimiter::isOld).forEach(rateLimiterMap.keySet()::remove);
+        }
         return rateLimiterMap.computeIfAbsent(id, (k) -> new RateLimiter()).allowedAccess();
     }
 
