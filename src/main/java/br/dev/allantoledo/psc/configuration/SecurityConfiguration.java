@@ -1,5 +1,8 @@
 package br.dev.allantoledo.psc.configuration;
 
+import br.dev.allantoledo.psc.components.CustomTokenResolver;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -17,35 +20,43 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import static br.dev.allantoledo.psc.util.SecurityUtility.Scopes.*;
 import static org.springframework.security.oauth2.core.authorization.OAuth2AuthorizationManagers.hasScope;
 
+@Log
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfiguration {
 
+    private final CustomTokenResolver tokenResolver;
+
     @Bean
-    public SecurityFilterChain configuration(HttpSecurity http) {
+    public SecurityFilterChain configuration(
+            HttpSecurity http
+    ) {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) ->
                     authorize
-                        .requestMatchers("/error")  .permitAll()
-                        .requestMatchers("/docs/**").permitAll()
+                        .requestMatchers("/error")                  .permitAll()
+                        .requestMatchers("/docs/**")                .permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS,  "/**").permitAll()
 
                         .requestMatchers(HttpMethod.GET,  "/v1/files/covers/**").permitAll()
 
-                        .requestMatchers(HttpMethod.POST, "/v1/users")      .permitAll()
-                        .requestMatchers(HttpMethod.POST, "/v1/recovery")   .permitAll()
-                        .requestMatchers(HttpMethod.GET,  "/v1/recovery")   .permitAll()
-                        .requestMatchers(HttpMethod.GET,  "/v1/users/me")   .authenticated()
-                        .requestMatchers(HttpMethod.PUT,  "/v1/users/me")   .authenticated()
-                        .requestMatchers(HttpMethod.GET,  "/v1/token")      .authenticated()
-                        .requestMatchers(HttpMethod.GET,  "/v1/users")      .access(hasScope(MANAGER_USERS.name()))
-                        .requestMatchers(HttpMethod.GET,  "/v1/users/*")    .access(hasScope(MANAGER_USERS.name()))
-                        .requestMatchers(HttpMethod.PUT,  "/v1/users/*")    .access(hasScope(MANAGER_USERS.name()))
+                        .requestMatchers(HttpMethod.POST,  "/v1/users")     .permitAll()
+                        .requestMatchers(HttpMethod.POST,  "/v1/recovery")  .permitAll()
+                        .requestMatchers(HttpMethod.GET,   "/v1/recovery")  .permitAll()
+                        .requestMatchers(HttpMethod.GET,   "/v1/users/me")  .authenticated()
+                        .requestMatchers(HttpMethod.PUT,   "/v1/users/me")  .authenticated()
+                        .requestMatchers(HttpMethod.GET,   "/v1/token")     .authenticated()
+                        .requestMatchers(HttpMethod.GET,   "/v1/users")     .access(hasScope(MANAGER_USERS.name()))
+                        .requestMatchers(HttpMethod.GET,   "/v1/users/*")   .access(hasScope(MANAGER_USERS.name()))
+                        .requestMatchers(HttpMethod.PUT,   "/v1/users/*")   .access(hasScope(MANAGER_USERS.name()))
 
                         .requestMatchers(HttpMethod.GET,    "/v1/artists")  .access(hasScope(ACCESS_COLLECTION.name()))
                         .requestMatchers(HttpMethod.GET,    "/v1/artists/*").access(hasScope(ACCESS_COLLECTION.name()))
@@ -64,6 +75,7 @@ public class SecurityConfiguration {
                 .httpBasic(Customizer.withDefaults())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(Customizer.withDefaults())
+                        .bearerTokenResolver(tokenResolver)
                 )
                 .build();
     }
@@ -92,10 +104,11 @@ public class SecurityConfiguration {
             @Override
             public void addCorsMappings(@NonNull CorsRegistry registry) {
                 String[] origins = allowedOrigins.split(" ");
+                log.info("Allowed origins " + Arrays.toString(origins));
                 registry
                     .addMapping("/**")
                     .allowedOrigins(origins)
-                    .allowedMethods("POST", "GET", "PUT", "DELETE")
+                    .allowedMethods("*")
                     .allowCredentials(true);
             }
         };
