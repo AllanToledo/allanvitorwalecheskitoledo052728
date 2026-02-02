@@ -2,6 +2,7 @@
 Processo Seletivo Nº 001/2026 SEPLAG
 
 Autor: Allan Vitor Walecheski Toledo
+Projeto: Backend
 
 ### Padrões de projeto
 * Todo o código será escrito em inglês.
@@ -98,6 +99,11 @@ Ao gerar o token de acesso, a aplicação inclui no token os escopos conforme o 
 
 Para gerar o primeiro token, é possível através do cabeçalho de autenticação usando o esquema Basic.
 Para usar o token bastar usar o mesmo cabeçalho, porém trocando para o esquema Bearer.
+
+### Websockets
+A aplicação fornece comunicação bidirecional por websockets utilizando protocolo STOMP.
+Para iniciar a comunicação, basta conectar-se através do endpoint `/api/ws`.
+A inscrição para notificações de novos álbuns ocorre por meio do canal `/notifications/albums`.
 
 ### Observações sobre a arquitetura desenvolvida
 Nenhuma operação de segurança é realizada após a validação do acesso do usuário ao recurso.
