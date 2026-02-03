@@ -57,7 +57,7 @@ public interface AlbumRepository extends JpaRepository<Album, UUID> {
     List<Album> findAllByIdsAndFetchAuthors(List<UUID> albumsIds);
 
     @Query("""
-        SELECT a FROM Album a LEFT JOIN FETCH a.covers c WHERE c.id = :idCover
+        SELECT a.id FROM Album a LEFT JOIN a.covers c WHERE c.id = :idCover
     """)
-    Optional<Album> getAlbumByCoverId(UUID idCover);
+    List<UUID> getAlbumByCoverId(UUID idCover);
 }

@@ -119,8 +119,9 @@ public class AlbumService {
     }
 
     public Album deleteCover(UUID id) {
-        Album album = albumRepository.getAlbumByCoverId(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        List<Album> albums = albumRepository.findAllByIdsAndFetchAuthors(albumRepository.getAlbumByCoverId(id));
+        if (albums.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        Album album = albums.getFirst();
         album.setCovers(
             album.getCovers()
             .stream()
