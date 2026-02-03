@@ -3,9 +3,6 @@ package br.dev.allantoledo.psc.dto.file;
 import br.dev.allantoledo.psc.entity.File;
 import br.dev.allantoledo.psc.service.FileService;
 import lombok.Data;
-import org.bouncycastle.util.Properties;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 
 import java.util.UUID;
 
