@@ -25,4 +25,6 @@ services:
     env_file:
       - ".env.prod"
     depends_on:
-      - database
+      database:
+        condition: service_healthy
+        restart: true
