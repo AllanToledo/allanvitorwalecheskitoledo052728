@@ -4,6 +4,23 @@ Processo Seletivo Nº 001/2026 SEPLAG
 Autor: Allan Vitor Walecheski Toledo
 Projeto: Backend
 
+### Como executar o projeto
+Para executar o projeto, é necessário ter o Docker e o Docker Compose instalado.  
+Na pasta raiz do projeto execute o comando:  
+**Mac OS**
+```bash
+docker compose up -d
+```
+**Linux**
+```bash
+sudo docker-compose up -d
+```
+Isso causará a compilação do projeto e a orquestração dos demais containers para funcionar em conjunto.
+
+A porta 8080 ficará exposta para requisições da API.
+É possível também utilizar a ferramenta [Bruno](https://www.usebruno.com/) para testar os endpoints.
+As configurações de requisição estão na pasta `./dev/bruno`.
+
 ### Padrões de projeto
 * Todo o código será escrito em inglês.
 * Documentação será escrita em português.
