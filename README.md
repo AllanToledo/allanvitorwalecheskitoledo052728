@@ -9,11 +9,11 @@ Para executar o projeto, é necessário ter o Docker e o Docker Compose instalad
 Na pasta raiz do projeto execute o comando:  
 **Mac OS**
 ```bash
-docker compose up -d
+docker compose up -d --build
 ```
 **Linux**
 ```bash
-sudo docker-compose up -d
+sudo docker-compose up -d --build
 ```
 Isso causará a compilação do projeto e a orquestração dos demais containers para funcionar em conjunto.
 
@@ -72,48 +72,7 @@ _O nome 'app_user' foi usado, pois no Postgres 'user' é uma palavra reservada._
 ### Rotas
 
 As rotas seguem boas práticas definidas pela arquitetura REST e pela comunidade.
-
-`POST /users` -> Cria um novo usuário \
-`GET  /recovery?email=` -> Solicita um link de recuperação que será enviado ao email \
-`PUT  /recovery?token=` -> Atualiza a senha por link autoassinado \
-`GET  /token` -> Solicita um token novo \
-`PUT  /users/{id}` -> Atualiza (parcial ou integralmente) um usuário existente \
-`GET  /users/{id}` -> Acessa um usuário \
-`GET  /users/me` -> Acessa o próprio usuário
-
-`POST /artists` -> Cria um novo artista \
-`PUT  /artists/{id}` -> Atualiza (parcial ou integralmente) um artista existente \
-`GET  /artists` -> Retorna uma coleção paginada de artistas \
-`GET  /artists/{id}` -> Retorna um artista
-
-`POST /albums` -> Cria um novo álbum \
-`PUT  /albums/{id}` -> Atualiza (parcial ou integralmente) um álbum \
-`GET  /albums` -> Retorna uma coleção paginada de álbuns \
-`GET  /albuns/{id}` -> Retorna um álbum
-
-### Parâmetros nas rotas
-
-Os parâmetros são opcionais e se usados são aplicados através do conectivo lógico conjunção (AND)
-
-`GET /albums` Aceita os seguintes parametros:
-* `artistNameLike`
-* `artistIdEqual`
-* `albumNameLike`
-* `albumYearEqual`
-* `albumYearBefore`
-* `albumYearAfter`
-
-`GET /artists` Aceita os seguintes parametros:
-* `artistNameLike`
-* `albumNameLike`
-* `albumYearEqual`
-* `albumYearBefore`
-* `albumYearAfter`
-
-`GET /users` Aceita os seguintes parametros:
-* `nameLike`
-* `emailLike`
-* `isAdminEqual`
+As rotas estão documentadas através do Swagger no endereço: http://localhost:8080/api/docs/
 
 ### Paginação
 A paginação é composta por dois parâmetros especiais nas rotas de coleções:
@@ -121,7 +80,6 @@ A paginação é composta por dois parâmetros especiais nas rotas de coleções
 * `limit` (padrão: 100)
 
 _Paginação é obrigatória._
-
 
 ### Segurança
 O requisito do projeto não detalhada as regras de acesso. Portanto, definirei que:
