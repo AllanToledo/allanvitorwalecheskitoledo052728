@@ -37,6 +37,15 @@ public class RegionalEndpointService {
                 updateEndpoint(api);
             }
         });
+
+        Map<Long, RegionalEndpointFromGeiaApi> endpointsFromApiMap = endpointsFromApi.stream()
+                .collect(Collectors.toMap(RegionalEndpointFromGeiaApi::getId, r -> r));
+        endpoints.forEach(local -> {
+            if (!endpointsFromApiMap.containsKey(local.getIdExtern())) {
+                log.info(String.format("Endpoint Ausente: [%s] %s", local.getIdExtern(), local.getName()));
+                regionalEndpointRepository.deactivateAllByIdExtern(local.getIdExtern());
+            }
+        });
         log.info("Endpoints regionais atualizados!");
     }
 
