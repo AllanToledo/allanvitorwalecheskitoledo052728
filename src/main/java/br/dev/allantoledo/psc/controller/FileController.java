@@ -19,7 +19,7 @@ public class FileController {
 
     private final FileService fileService;
 
-    @GetMapping("/v1files/{bucket}/{name}")
+    @GetMapping("/v1/files/{bucket}/{name}")
     public ResponseEntity<InputStreamResource> getFile(
             @PathVariable String bucket,
             @PathVariable String name
