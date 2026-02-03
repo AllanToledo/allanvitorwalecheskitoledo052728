@@ -1,4 +1,4 @@
-package br.dev.allantoledo.psc.components;
+package br.dev.allantoledo.psc.configuration;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
