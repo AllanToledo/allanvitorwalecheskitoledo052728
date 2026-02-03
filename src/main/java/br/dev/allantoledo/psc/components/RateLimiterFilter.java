@@ -4,16 +4,18 @@ import br.dev.allantoledo.psc.dto.user.UserLoginInformation;
 import br.dev.allantoledo.psc.util.SecurityUtility;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 
+
+@Log
 @Component
 public class RateLimiterFilter implements Filter {
 
@@ -40,23 +42,20 @@ public class RateLimiterFilter implements Filter {
         }
     }
 
-    static <K, V> Stream<K> filterMap(Map<K, V> map, Predicate<V> predicate) {
-        return map.entrySet().stream()
-                .filter(entry -> predicate.test(entry.getValue()))
-                .map(Map.Entry::getKey);
-    }
-
-
     @Value("${security.rateLimit}")
     private String rateLimit;
     private final Map<UUID, RateLimiter> rateLimiterMap = new ConcurrentHashMap<>();
-    private long lastCheck = 0;
-    private synchronized boolean isUserAllowed(UUID id) {
-        if ((System.currentTimeMillis() - lastCheck) > RateLimiter.duration) {
-            lastCheck = System.currentTimeMillis();
-            filterMap(rateLimiterMap, RateLimiter::isOld).forEach(rateLimiterMap.keySet()::remove);
-        }
+    private boolean isUserAllowed(UUID id) {
         return rateLimiterMap.computeIfAbsent(id, (k) -> new RateLimiter()).allowedAccess();
+    }
+
+    @Scheduled(fixedRate = 1000 * 60 * 15) // 15 minutos
+    private void cleanupMap() {
+        log.info("Executando limpeza de memória!");
+        rateLimiterMap.entrySet().stream()
+            .filter(entry -> entry.getValue().isOld())
+            .map(Map.Entry::getKey)
+            .forEach(rateLimiterMap.keySet()::remove);
     }
 
     @Override
