@@ -1,6 +1,7 @@
 package br.dev.allantoledo.psc.dto.album;
 
 import br.dev.allantoledo.psc.dto.artist.ArtistInformation;
+import br.dev.allantoledo.psc.dto.file.FileInformation;
 import br.dev.allantoledo.psc.entity.Album;
 import lombok.Data;
 

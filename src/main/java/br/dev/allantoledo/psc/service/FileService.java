@@ -10,6 +10,7 @@ import io.minio.errors.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,14 +25,21 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FileService {
 
+    @Value("${minio.user}")
+    private String minioUser;
+    @Value("${minio.pass}")
+    private String minioPass;
+    @Value("${minio.endpoint}")
+    private String minioEndpoint;
+
     private MinioClient client;
     private final FileRepository fileRepository;
 
     @PostConstruct
     public void init() {
         client = MinioClient.builder()
-            .endpoint("http://127.0.0.1:9000")
-            .credentials("minioadmin", "minioadmin")
+            .endpoint(minioEndpoint)
+            .credentials(minioUser, minioPass)
             .build();
     }
 
